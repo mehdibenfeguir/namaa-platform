@@ -100,11 +100,11 @@ const KSA_HUBS = [
   { region: 'Madinah', lat: 24.5247, lng: 39.5692 },
   { region: 'Dammam', lat: 26.4207, lng: 50.0888 },
   { region: 'Tabuk', lat: 28.3838, lng: 36.555 },
-  { region: 'Najran', lat: 17.4924, lng: 44.1277 },
+  { region: 'Najran', lat: 17.72, lng: 44.18 },
   { region: 'Qassim', lat: 26.326, lng: 43.975 },
-  { region: 'Asir', lat: 18.2164, lng: 42.5053 },
+  { region: 'Asir', lat: 18.32, lng: 42.52 },
   { region: 'AlUla', lat: 26.608, lng: 37.923 },
-  { region: 'Jazan', lat: 16.8892, lng: 42.5706 },
+  { region: 'Jazan', lat: 17.12, lng: 42.68 },
   { region: 'Hail', lat: 27.5114, lng: 41.7208 },
   { region: 'Al Jawf', lat: 29.9697, lng: 40.2064 },
 ] as const
@@ -128,6 +128,17 @@ function mulberry32(seed: number) {
   }
 }
 
+function clampInsideKsa(lat: number, lng: number): { lat: number; lng: number } {
+  let la = Math.min(31.85, Math.max(17.05, lat))
+  let ln = Math.min(54.6, Math.max(35.2, lng))
+  // Southern belt: stay north of the Yemen border and inland of the Red Sea.
+  if (la < 18.0) {
+    la = Math.max(17.08, la)
+    ln = Math.min(44.55, Math.max(42.15, ln))
+  }
+  return { lat: la, lng: ln }
+}
+
 function buildSensors(): Sensor[] {
   const rand = mulberry32(2030)
   const statuses: Sensor['status'][] = [
@@ -137,12 +148,14 @@ function buildSensors(): Sensor[] {
   ]
   return statuses.map((status, i) => {
     const hub = KSA_HUBS[i % KSA_HUBS.length]
-    const lat = hub.lat + (rand() - 0.5) * 0.9
-    const lng = hub.lng + (rand() - 0.5) * 0.9
+    const southern = hub.lat < 18.5
+    const latJitter = southern ? rand() * 0.22 : (rand() - 0.5) * 0.36
+    const lngJitter = (rand() - 0.5) * (southern ? 0.22 : 0.36)
+    const pinned = clampInsideKsa(hub.lat + latJitter, hub.lng + lngJitter)
     return {
       id: `SN-${String(i + 1).padStart(3, '0')}`,
-      lat,
-      lng,
+      lat: pinned.lat,
+      lng: pinned.lng,
       status,
       type: SENSOR_TYPES[i % SENSOR_TYPES.length],
       unit: `Unit ${i + 1} · ${hub.region}`,
@@ -219,9 +232,9 @@ export const LAND_UNITS = [
   { id: 'U-067', status: 'active' as const, ha: 20, mw: 1.2, lat: 26.4207, lng: 50.0888, region: 'Eastern Province' },
   { id: 'U-088', status: 'prep' as const, ha: 20, mw: 1.2, lat: 28.3838, lng: 36.5550, region: 'Tabuk' },
   { id: 'U-102', status: 'prepared' as const, ha: 20, mw: 1.2, lat: 26.6080, lng: 37.9230, region: 'AlUla' },
-  { id: 'U-140', status: 'prep' as const, ha: 20, mw: 1.2, lat: 17.4924, lng: 44.1277, region: 'Najran' },
+  { id: 'U-140', status: 'prep' as const, ha: 20, mw: 1.2, lat: 17.72, lng: 44.18, region: 'Najran' },
   { id: 'U-188', status: 'active' as const, ha: 20, mw: 1.2, lat: 26.3260, lng: 43.9750, region: 'Qassim' },
-  { id: 'U-214', status: 'active' as const, ha: 20, mw: 1.2, lat: 16.8892, lng: 42.5706, region: 'Jazan' },
+  { id: 'U-214', status: 'active' as const, ha: 20, mw: 1.2, lat: 17.12, lng: 42.68, region: 'Jazan' },
   { id: 'U-301', status: 'prep' as const, ha: 20, mw: 1.2, lat: 29.9697, lng: 40.2064, region: 'Al Jawf' },
 ]
 
