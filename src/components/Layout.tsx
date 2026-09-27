@@ -15,6 +15,7 @@ import {
   X,
   Bell,
   Leaf,
+  Sparkles,
 } from 'lucide-react'
 import { BRAND, NAV } from '../data/namaa'
 import { cx } from '../lib/format'
@@ -89,6 +90,9 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         </div>
         <div className="mt-1 text-sm font-bold">{BRAND.preparedBy}</div>
         <div className="text-xs text-emerald-950/70">{BRAND.preparedByAr}</div>
+        <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-950/90">
+          <Sparkles size={14} /> Vision 2030 Ready
+        </div>
       </div>
     </div>
   )
