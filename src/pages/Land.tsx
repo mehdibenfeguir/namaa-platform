@@ -1,12 +1,13 @@
 import { Map } from 'lucide-react'
 import { Badge, Card, PageHeader, Progress } from '../components/ui'
+import KsaMap from '../components/KsaMap'
 import { LAND_SUMMARY, LAND_UNITS } from '../data/namaa'
 import { cx, num } from '../lib/format'
 
 const color: Record<string, string> = {
-  active: 'bg-leaf-500',
-  prepared: 'bg-solar-500',
-  prep: 'bg-stone-400',
+  active: '#22c55e',
+  prepared: '#f59e0b',
+  prep: '#a8a29e',
 }
 
 const label: Record<string, string> = {
@@ -22,7 +23,7 @@ export default function Land() {
       <PageHeader
         kicker="Targets · land"
         title="Land allocation & GIS status"
-        description="10,000 ha desert target, split into 500 independent 20 ha / 1.2 MW agricultural units."
+        description="10,000 ha desert target across the Kingdom, split into 500 independent 20 ha / 1.2 MW agricultural units."
         icon={<Map size={22} />}
       />
 
@@ -51,40 +52,29 @@ export default function Land() {
 
       <Card className="overflow-hidden">
         <div className="flex flex-wrap items-center gap-2 border-b border-emerald-900/8 px-5 py-3">
-          <div className="font-bold text-emerald-950">Parcel map (sample units)</div>
+          <div>
+            <div className="font-bold text-emerald-950">Parcel map (sample units)</div>
+            <div className="text-[11px] text-emerald-800/50">Kingdom of Saudi Arabia</div>
+          </div>
           {Object.entries(label).map(([k, v]) => (
             <Badge key={k} tone={k === 'active' ? 'leaf' : k === 'prepared' ? 'solar' : 'slate'}>
-              <span className={cx('size-2 rounded-full', color[k])} /> {v}
+              <span
+                className={cx('size-2 rounded-full')}
+                style={{ background: color[k] }}
+              />{' '}
+              {v}
             </Badge>
           ))}
         </div>
-        <div className="relative h-[440px] desert-grid bg-gradient-to-br from-amber-100/80 to-leaf-50">
-          {LAND_UNITS.map((u) => (
-            <div
-              key={u.id}
-              className="absolute -translate-x-1/2 -translate-y-1/2"
-              style={{ left: `${u.x}%`, top: `${u.y}%` }}
-            >
-              <div className="group">
-                <div
-                  className={cx(
-                    'grid size-9 place-items-center rounded-lg text-[10px] font-bold text-white shadow-md',
-                    color[u.status],
-                  )}
-                >
-                  {u.id.slice(2)}
-                </div>
-                <div className="pointer-events-none absolute left-10 top-0 hidden w-40 rounded-lg bg-ink-950 p-2 text-[11px] text-white group-hover:block">
-                  <div className="font-bold">{u.id}</div>
-                  <div>{label[u.status]}</div>
-                  <div className="text-white/60">
-                    {u.ha} ha · {u.mw} MW
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <KsaMap
+          markers={LAND_UNITS.map((u) => ({
+            id: u.id,
+            lat: u.lat,
+            lng: u.lng,
+            color: color[u.status],
+            popup: `<strong>${u.id}</strong><br/>${u.region}<br/>${label[u.status]}<br/>${u.ha} ha · ${u.mw} MW`,
+          }))}
+        />
       </Card>
     </div>
   )

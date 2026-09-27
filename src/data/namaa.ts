@@ -95,14 +95,14 @@ export type Sensor = {
 }
 
 export const SENSORS: Sensor[] = [
-  { id: 'SN-014', lat: 24.7742, lng: 46.7385, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 12 · North Riyadh' },
-  { id: 'SN-027', lat: 24.7136, lng: 46.6753, status: 'online' as const, type: 'Irradiance', unit: 'Unit 18 · Olaya' },
-  { id: 'SN-041', lat: 24.7370, lng: 46.5754, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 33 · Diriyah' },
-  { id: 'SN-058', lat: 24.6508, lng: 46.7212, status: 'degraded' as const, type: 'Wind', unit: 'Unit 41 · South Ring' },
-  { id: 'SN-073', lat: 24.7485, lng: 46.8520, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 67 · Janadriyah' },
-  { id: 'SN-088', lat: 24.5795, lng: 46.6420, status: 'offline' as const, type: 'Flow meter', unit: 'Unit 09 · Al Kharj Rd' },
-  { id: 'SN-102', lat: 24.6948, lng: 46.7895, status: 'online' as const, type: 'Nutrient EC', unit: 'CEA-A · East Riyadh' },
-  { id: 'SN-119', lat: 24.8210, lng: 46.6408, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 92 · King Khalid Rd' },
+  { id: 'SN-014', lat: 24.7136, lng: 46.6753, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 12 · Riyadh' },
+  { id: 'SN-027', lat: 21.4858, lng: 39.1925, status: 'online' as const, type: 'Irradiance', unit: 'Unit 18 · Jeddah' },
+  { id: 'SN-041', lat: 24.5247, lng: 39.5692, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 33 · Madinah' },
+  { id: 'SN-058', lat: 26.4207, lng: 50.0888, status: 'degraded' as const, type: 'Wind', unit: 'Unit 41 · Dammam' },
+  { id: 'SN-073', lat: 28.3838, lng: 36.5550, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 67 · Tabuk' },
+  { id: 'SN-088', lat: 17.4924, lng: 44.1277, status: 'offline' as const, type: 'Flow meter', unit: 'Unit 09 · Najran' },
+  { id: 'SN-102', lat: 26.3260, lng: 43.9750, status: 'online' as const, type: 'Nutrient EC', unit: 'CEA-A · Qassim' },
+  { id: 'SN-119', lat: 18.2164, lng: 42.5053, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 92 · Asir / Abha' },
 ]
 
 export const AI_RECS = [
@@ -166,16 +166,16 @@ export const IMPACT = {
 }
 
 export const LAND_UNITS = [
-  { id: 'U-012', status: 'active' as const, ha: 20, mw: 1.2, x: 16, y: 24 },
-  { id: 'U-033', status: 'active' as const, ha: 20, mw: 1.2, x: 28, y: 38 },
-  { id: 'U-041', status: 'prepared' as const, ha: 20, mw: 1.2, x: 42, y: 22 },
-  { id: 'U-067', status: 'active' as const, ha: 20, mw: 1.2, x: 55, y: 48 },
-  { id: 'U-088', status: 'prep' as const, ha: 20, mw: 1.2, x: 68, y: 30 },
-  { id: 'U-102', status: 'prepared' as const, ha: 20, mw: 1.2, x: 74, y: 58 },
-  { id: 'U-140', status: 'prep' as const, ha: 20, mw: 1.2, x: 36, y: 66 },
-  { id: 'U-188', status: 'active' as const, ha: 20, mw: 1.2, x: 50, y: 78 },
-  { id: 'U-214', status: 'active' as const, ha: 20, mw: 1.2, x: 22, y: 80 },
-  { id: 'U-301', status: 'prep' as const, ha: 20, mw: 1.2, x: 82, y: 18 },
+  { id: 'U-012', status: 'active' as const, ha: 20, mw: 1.2, lat: 24.7136, lng: 46.6753, region: 'Riyadh' },
+  { id: 'U-033', status: 'active' as const, ha: 20, mw: 1.2, lat: 21.4858, lng: 39.1925, region: 'Jeddah' },
+  { id: 'U-041', status: 'prepared' as const, ha: 20, mw: 1.2, lat: 24.5247, lng: 39.5692, region: 'Madinah' },
+  { id: 'U-067', status: 'active' as const, ha: 20, mw: 1.2, lat: 26.4207, lng: 50.0888, region: 'Eastern Province' },
+  { id: 'U-088', status: 'prep' as const, ha: 20, mw: 1.2, lat: 28.3838, lng: 36.5550, region: 'Tabuk' },
+  { id: 'U-102', status: 'prepared' as const, ha: 20, mw: 1.2, lat: 26.6080, lng: 37.9230, region: 'AlUla' },
+  { id: 'U-140', status: 'prep' as const, ha: 20, mw: 1.2, lat: 17.4924, lng: 44.1277, region: 'Najran' },
+  { id: 'U-188', status: 'active' as const, ha: 20, mw: 1.2, lat: 26.3260, lng: 43.9750, region: 'Qassim' },
+  { id: 'U-214', status: 'active' as const, ha: 20, mw: 1.2, lat: 16.8892, lng: 42.5706, region: 'Jazan' },
+  { id: 'U-301', status: 'prep' as const, ha: 20, mw: 1.2, lat: 29.9697, lng: 40.2064, region: 'Al Jawf' },
 ]
 
 export const LAND_SUMMARY = {

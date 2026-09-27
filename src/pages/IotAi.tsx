@@ -1,7 +1,13 @@
 import { Radio } from 'lucide-react'
 import { Badge, Card, PageHeader, Progress } from '../components/ui'
-import RiyadhSensorMap from '../components/RiyadhSensorMap'
+import KsaMap from '../components/KsaMap'
 import { AI_RECS, SENSORS } from '../data/namaa'
+
+const statusColor = {
+  online: '#22c55e',
+  degraded: '#f59e0b',
+  offline: '#f43f5e',
+}
 
 export default function IotAi() {
   const online = SENSORS.filter((s) => s.status === 'online').length
@@ -10,7 +16,7 @@ export default function IotAi() {
       <PageHeader
         kicker="IoT & AI"
         title="Sensor network & recommendations"
-        description="Field sensors plotted on a live Riyadh map, plus AI irrigation and shading advice from solar tracking and weather."
+        description="Field sensors plotted across the Kingdom of Saudi Arabia, plus AI irrigation and shading advice from solar tracking and weather."
         icon={<Radio size={22} />}
       />
 
@@ -19,7 +25,9 @@ export default function IotAi() {
           <div className="flex items-center justify-between border-b border-emerald-900/8 px-5 py-3">
             <div>
               <div className="font-bold text-emerald-950">Site sensor map</div>
-              <div className="text-[11px] text-emerald-800/50">Riyadh, Kingdom of Saudi Arabia</div>
+              <div className="text-[11px] text-emerald-800/50">
+                Kingdom of Saudi Arabia
+              </div>
             </div>
             <div className="flex gap-2 text-xs">
               <Badge tone="leaf">{online} online</Badge>
@@ -27,7 +35,16 @@ export default function IotAi() {
               <Badge tone="rose">1 offline</Badge>
             </div>
           </div>
-          <RiyadhSensorMap sensors={SENSORS} />
+          <KsaMap
+            heightClass="h-[420px]"
+            markers={SENSORS.map((s) => ({
+              id: s.id,
+              lat: s.lat,
+              lng: s.lng,
+              color: statusColor[s.status],
+              popup: `<strong>${s.id}</strong><br/>${s.type}<br/><span style="opacity:.7">${s.unit}</span>`,
+            }))}
+          />
         </Card>
 
         <div className="space-y-3 lg:col-span-2">
