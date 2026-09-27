@@ -2,6 +2,8 @@
 
 Smart agrivoltaics platform demo — static frontend for managing desert-land dual-use PV + agriculture (Vision 2030).
 
+**Live:** [https://mehdibenfeguir.github.io/namaa-platform/](https://mehdibenfeguir.github.io/namaa-platform/)
+
 Prepared by **Fatma Ben Feguir**.
 
 ## Local
