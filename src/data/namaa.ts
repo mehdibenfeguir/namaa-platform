@@ -85,15 +85,24 @@ export const ENERGY_HOURLY = [
   { t: '18:00', gen: 85, pump: 40, battery: 20 },
 ]
 
-export const SENSORS = [
-  { id: 'SN-014', x: 18, y: 28, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 12' },
-  { id: 'SN-027', x: 34, y: 42, status: 'online' as const, type: 'Irradiance', unit: 'Unit 18' },
-  { id: 'SN-041', x: 52, y: 22, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 33' },
-  { id: 'SN-058', x: 61, y: 58, status: 'degraded' as const, type: 'Wind', unit: 'Unit 41' },
-  { id: 'SN-073', x: 72, y: 36, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 67' },
-  { id: 'SN-088', x: 27, y: 68, status: 'offline' as const, type: 'Flow meter', unit: 'Unit 09' },
-  { id: 'SN-102', x: 80, y: 70, status: 'online' as const, type: 'Nutrient EC', unit: 'CEA-A' },
-  { id: 'SN-119', x: 44, y: 78, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 92' },
+export type Sensor = {
+  id: string
+  lat: number
+  lng: number
+  status: 'online' | 'degraded' | 'offline'
+  type: string
+  unit: string
+}
+
+export const SENSORS: Sensor[] = [
+  { id: 'SN-014', lat: 24.7742, lng: 46.7385, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 12 · North Riyadh' },
+  { id: 'SN-027', lat: 24.7136, lng: 46.6753, status: 'online' as const, type: 'Irradiance', unit: 'Unit 18 · Olaya' },
+  { id: 'SN-041', lat: 24.7370, lng: 46.5754, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 33 · Diriyah' },
+  { id: 'SN-058', lat: 24.6508, lng: 46.7212, status: 'degraded' as const, type: 'Wind', unit: 'Unit 41 · South Ring' },
+  { id: 'SN-073', lat: 24.7485, lng: 46.8520, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 67 · Janadriyah' },
+  { id: 'SN-088', lat: 24.5795, lng: 46.6420, status: 'offline' as const, type: 'Flow meter', unit: 'Unit 09 · Al Kharj Rd' },
+  { id: 'SN-102', lat: 24.6948, lng: 46.7895, status: 'online' as const, type: 'Nutrient EC', unit: 'CEA-A · East Riyadh' },
+  { id: 'SN-119', lat: 24.8210, lng: 46.6408, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 92 · King Khalid Rd' },
 ]
 
 export const AI_RECS = [
