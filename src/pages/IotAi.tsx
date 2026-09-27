@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Radio } from 'lucide-react'
 import { Badge, Card, PageHeader, Progress } from '../components/ui'
 import KsaMap from '../components/KsaMap'
@@ -10,7 +11,22 @@ const statusColor = {
 }
 
 export default function IotAi() {
-  const online = SENSORS.filter((s) => s.status === 'online').length
+  const counts = useMemo(() => {
+    const c = { online: 0, degraded: 0, offline: 0 }
+    for (const s of SENSORS) c[s.status] += 1
+    return c
+  }, [])
+  const markers = useMemo(
+    () =>
+      SENSORS.map((s) => ({
+        id: s.id,
+        lat: s.lat,
+        lng: s.lng,
+        color: statusColor[s.status],
+        popup: `<strong>${s.id}</strong><br/>${s.type}<br/><span style="opacity:.7">${s.unit}</span>`,
+      })),
+    [],
+  )
   return (
     <div>
       <PageHeader
@@ -30,21 +46,12 @@ export default function IotAi() {
               </div>
             </div>
             <div className="flex gap-2 text-xs">
-              <Badge tone="leaf">{online} online</Badge>
-              <Badge tone="solar">1 degraded</Badge>
-              <Badge tone="rose">1 offline</Badge>
+              <Badge tone="leaf">{counts.online} online</Badge>
+              <Badge tone="solar">{counts.degraded} degraded</Badge>
+              <Badge tone="rose">{counts.offline} offline</Badge>
             </div>
           </div>
-          <KsaMap
-            heightClass="h-[420px]"
-            markers={SENSORS.map((s) => ({
-              id: s.id,
-              lat: s.lat,
-              lng: s.lng,
-              color: statusColor[s.status],
-              popup: `<strong>${s.id}</strong><br/>${s.type}<br/><span style="opacity:.7">${s.unit}</span>`,
-            }))}
-          />
+          <KsaMap heightClass="h-[420px]" markers={markers} />
         </Card>
 
         <div className="space-y-3 lg:col-span-2">

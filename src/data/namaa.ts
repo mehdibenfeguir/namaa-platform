@@ -94,16 +94,63 @@ export type Sensor = {
   unit: string
 }
 
-export const SENSORS: Sensor[] = [
-  { id: 'SN-014', lat: 24.7136, lng: 46.6753, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 12 · Riyadh' },
-  { id: 'SN-027', lat: 21.4858, lng: 39.1925, status: 'online' as const, type: 'Irradiance', unit: 'Unit 18 · Jeddah' },
-  { id: 'SN-041', lat: 24.5247, lng: 39.5692, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 33 · Madinah' },
-  { id: 'SN-058', lat: 26.4207, lng: 50.0888, status: 'degraded' as const, type: 'Wind', unit: 'Unit 41 · Dammam' },
-  { id: 'SN-073', lat: 28.3838, lng: 36.5550, status: 'online' as const, type: 'Soil moisture', unit: 'Unit 67 · Tabuk' },
-  { id: 'SN-088', lat: 17.4924, lng: 44.1277, status: 'offline' as const, type: 'Flow meter', unit: 'Unit 09 · Najran' },
-  { id: 'SN-102', lat: 26.3260, lng: 43.9750, status: 'online' as const, type: 'Nutrient EC', unit: 'CEA-A · Qassim' },
-  { id: 'SN-119', lat: 18.2164, lng: 42.5053, status: 'online' as const, type: 'Temp / RH', unit: 'Unit 92 · Asir / Abha' },
-]
+const KSA_HUBS = [
+  { region: 'Riyadh', lat: 24.7136, lng: 46.6753 },
+  { region: 'Jeddah', lat: 21.4858, lng: 39.1925 },
+  { region: 'Madinah', lat: 24.5247, lng: 39.5692 },
+  { region: 'Dammam', lat: 26.4207, lng: 50.0888 },
+  { region: 'Tabuk', lat: 28.3838, lng: 36.555 },
+  { region: 'Najran', lat: 17.4924, lng: 44.1277 },
+  { region: 'Qassim', lat: 26.326, lng: 43.975 },
+  { region: 'Asir', lat: 18.2164, lng: 42.5053 },
+  { region: 'AlUla', lat: 26.608, lng: 37.923 },
+  { region: 'Jazan', lat: 16.8892, lng: 42.5706 },
+  { region: 'Hail', lat: 27.5114, lng: 41.7208 },
+  { region: 'Al Jawf', lat: 29.9697, lng: 40.2064 },
+] as const
+
+const SENSOR_TYPES = [
+  'Soil moisture',
+  'Irradiance',
+  'Temp / RH',
+  'Wind',
+  'Flow meter',
+  'Nutrient EC',
+] as const
+
+function mulberry32(seed: number) {
+  return () => {
+    seed |= 0
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function buildSensors(): Sensor[] {
+  const rand = mulberry32(2030)
+  const statuses: Sensor['status'][] = [
+    ...Array.from({ length: 100 }, () => 'online' as const),
+    ...Array.from({ length: 25 }, () => 'degraded' as const),
+    ...Array.from({ length: 25 }, () => 'offline' as const),
+  ]
+  return statuses.map((status, i) => {
+    const hub = KSA_HUBS[i % KSA_HUBS.length]
+    const lat = hub.lat + (rand() - 0.5) * 0.9
+    const lng = hub.lng + (rand() - 0.5) * 0.9
+    return {
+      id: `SN-${String(i + 1).padStart(3, '0')}`,
+      lat,
+      lng,
+      status,
+      type: SENSOR_TYPES[i % SENSOR_TYPES.length],
+      unit: `Unit ${i + 1} · ${hub.region}`,
+    }
+  })
+}
+
+export const SENSORS: Sensor[] = buildSensors()
 
 export const AI_RECS = [
   {
