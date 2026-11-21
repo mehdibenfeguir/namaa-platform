@@ -9,10 +9,19 @@ export const BRAND = {
   vision: 'Vision 2030 · Desert Reclamation',
 }
 
-export const NAV = [
+export type Role = 'government' | 'owner' | 'investor'
+
+export type NavGroup = {
+  id: string
+  title: string
+  items: { path: string; name: string; icon: string }[]
+}
+
+/** Existing operations portal — government only. */
+export const NAV: NavGroup[] = [
   {
     id: 'ops',
-    title: 'Operations',
+    title: 'Government operations',
     items: [
       { path: '/', name: 'Main Dashboard', icon: 'dashboard' },
       { path: '/iot', name: 'IoT & AI Management', icon: 'iot' },
@@ -25,12 +34,95 @@ export const NAV = [
   },
   {
     id: 'targets',
-    title: 'Targets & Strategic Impact',
+    title: 'Targets & investor access',
     items: [
-      { path: '/targets/land', name: 'Land Allocation', icon: 'land' },
+      { path: '/targets/land', name: 'Land & investor access', icon: 'land' },
       { path: '/targets/benchmarks', name: 'Ratios & Benchmarks', icon: 'ratios' },
       { path: '/targets/goals', name: 'Strategic Goals', icon: 'goals' },
     ],
+  },
+]
+
+export const OWNER_NAV: NavGroup[] = [
+  {
+    id: 'holdings',
+    title: 'My land',
+    items: [
+      { path: '/owner', name: 'Holdings', icon: 'land' },
+      { path: '/owner/access', name: 'Sale or exploitation', icon: 'unlock' },
+    ],
+  },
+]
+
+export const INVESTOR_NAV: NavGroup[] = [
+  {
+    id: 'deals',
+    title: 'External investment',
+    items: [
+      { path: '/investor', name: 'Open lands', icon: 'unlock' },
+      { path: '/investor/interest', name: 'My interest', icon: 'handshake' },
+    ],
+  },
+]
+
+export function navFor(role: Role): NavGroup[] {
+  if (role === 'owner') return OWNER_NAV
+  if (role === 'investor') return INVESTOR_NAV
+  return NAV
+}
+
+export function homeFor(role: Role) {
+  if (role === 'owner') return '/owner'
+  if (role === 'investor') return '/investor'
+  return '/'
+}
+
+export type DemoUser = {
+  email: string
+  password: string
+  role: Role
+  name: string
+  title: string
+  initials: string
+  partyId: string
+}
+
+export const DEMO_USERS: DemoUser[] = [
+  {
+    email: 'gov@namaa.sa',
+    password: 'namaa',
+    role: 'government',
+    name: 'MEWA Operator',
+    title: 'Government',
+    initials: 'GV',
+    partyId: 'mewa',
+  },
+  {
+    email: 'owner@namaa.sa',
+    password: 'namaa',
+    role: 'owner',
+    name: 'Al-Nakheel Holdings',
+    title: 'Land proprietor',
+    initials: 'NH',
+    partyId: 'nakheel',
+  },
+  {
+    email: 'waha@namaa.sa',
+    password: 'namaa',
+    role: 'owner',
+    name: 'Waha Desert Estates',
+    title: 'Land proprietor',
+    initials: 'WE',
+    partyId: 'waha',
+  },
+  {
+    email: 'investor@namaa.sa',
+    password: 'namaa',
+    role: 'investor',
+    name: 'Gulf Green Capital',
+    title: 'External investor',
+    initials: 'GG',
+    partyId: 'gulf',
   },
 ]
 
@@ -94,19 +186,20 @@ export type Sensor = {
   unit: string
 }
 
-const KSA_HUBS = [
-  { region: 'Riyadh', lat: 24.7136, lng: 46.6753 },
-  { region: 'Jeddah', lat: 21.4858, lng: 39.1925 },
-  { region: 'Madinah', lat: 24.5247, lng: 39.5692 },
-  { region: 'Dammam', lat: 26.4207, lng: 50.0888 },
-  { region: 'Tabuk', lat: 28.3838, lng: 36.555 },
-  { region: 'Najran', lat: 17.72, lng: 44.18 },
-  { region: 'Qassim', lat: 26.326, lng: 43.975 },
-  { region: 'Asir', lat: 18.32, lng: 42.52 },
-  { region: 'AlUla', lat: 26.608, lng: 37.923 },
-  { region: 'Jazan', lat: 17.12, lng: 42.68 },
-  { region: 'Hail', lat: 27.5114, lng: 41.7208 },
-  { region: 'Al Jawf', lat: 29.9697, lng: 40.2064 },
+/** Inland boxes, clear of the Red Sea and the Gulf. */
+const INLAND_BOXES = [
+  { region: 'Riyadh', lat: [23.9, 26.3], lng: [44.7, 47.5] },
+  { region: 'Qassim', lat: [25.6, 27.2], lng: [42.7, 44.8] },
+  { region: 'Hail', lat: [27.0, 28.4], lng: [40.8, 42.9] },
+  { region: 'Al Jawf', lat: [29.4, 31.2], lng: [38.6, 40.8] },
+  { region: 'Tabuk', lat: [27.5, 29.2], lng: [37.0, 38.5] },
+  { region: 'Madinah', lat: [24.0, 25.6], lng: [39.0, 40.5] },
+  { region: 'Makkah', lat: [21.3, 22.5], lng: [39.7, 41.3] },
+  { region: 'Asir', lat: [18.3, 20.2], lng: [42.1, 43.5] },
+  { region: 'Najran', lat: [17.5, 18.6], lng: [43.9, 45.2] },
+  { region: 'Jazan', lat: [17.05, 17.55], lng: [42.75, 43.35] },
+  { region: 'Eastern Province', lat: [24.9, 27.0], lng: [47.8, 49.6] },
+  { region: 'AlUla', lat: [26.3, 27.1], lng: [37.7, 38.5] },
 ] as const
 
 const SENSOR_TYPES = [
@@ -128,17 +221,6 @@ function mulberry32(seed: number) {
   }
 }
 
-function clampInsideKsa(lat: number, lng: number): { lat: number; lng: number } {
-  let la = Math.min(31.85, Math.max(17.05, lat))
-  let ln = Math.min(54.6, Math.max(35.2, lng))
-  // Southern belt: stay north of the Yemen border and inland of the Red Sea.
-  if (la < 18.0) {
-    la = Math.max(17.08, la)
-    ln = Math.min(44.55, Math.max(42.15, ln))
-  }
-  return { lat: la, lng: ln }
-}
-
 function buildSensors(): Sensor[] {
   const rand = mulberry32(2030)
   const statuses: Sensor['status'][] = [
@@ -146,19 +228,87 @@ function buildSensors(): Sensor[] {
     ...Array.from({ length: 25 }, () => 'degraded' as const),
     ...Array.from({ length: 25 }, () => 'offline' as const),
   ]
+  const areas = INLAND_BOXES.map(
+    (b) => (b.lat[1] - b.lat[0]) * (b.lng[1] - b.lng[0]),
+  )
+  const areaSum = areas.reduce((sum, area) => sum + area, 0)
+  const counts = areas.map((area) =>
+    Math.max(3, Math.round((area / areaSum) * statuses.length)),
+  )
+  let drift = statuses.length - counts.reduce((sum, n) => sum + n, 0)
+  for (let i = 0; drift !== 0; i++) {
+    const idx = i % counts.length
+    if (drift > 0) {
+      counts[idx] += 1
+      drift -= 1
+    } else if (counts[idx] > 3) {
+      counts[idx] -= 1
+      drift += 1
+    }
+  }
+
+  const placed: { region: string; lat: number; lng: number }[] = []
+  INLAND_BOXES.forEach((box, boxIndex) => {
+    const latSpan = box.lat[1] - box.lat[0]
+    const lngSpan = box.lng[1] - box.lng[0]
+    const farms = Array.from({ length: 3 }, () => ({
+      lat: box.lat[0] + (0.2 + rand() * 0.6) * latSpan,
+      lng: box.lng[0] + (0.2 + rand() * 0.6) * lngSpan,
+    }))
+    const here: { lat: number; lng: number }[] = []
+    for (let n = 0; n < counts[boxIndex]; n++) {
+      let lat = box.lat[0] + rand() * latSpan
+      let lng = box.lng[0] + rand() * lngSpan
+      for (let attempt = 0; attempt < 20; attempt++) {
+        const farm = farms[Math.floor(rand() * farms.length)]
+        const loose = rand() < 0.45
+        const candidateLat = Math.min(
+          box.lat[1],
+          Math.max(
+            box.lat[0],
+            loose
+              ? box.lat[0] + rand() * latSpan
+              : farm.lat + (rand() + rand() - 1) * latSpan * 0.55,
+          ),
+        )
+        const candidateLng = Math.min(
+          box.lng[1],
+          Math.max(
+            box.lng[0],
+            loose
+              ? box.lng[0] + rand() * lngSpan
+              : farm.lng + (rand() + rand() - 1) * lngSpan * 0.55,
+          ),
+        )
+        const minGap = Math.min(latSpan, lngSpan) * 0.12
+        const crowded = here.some((p) => {
+          const dLat = p.lat - candidateLat
+          const dLng = p.lng - candidateLng
+          return dLat * dLat + dLng * dLng < minGap * minGap
+        })
+        lat = candidateLat
+        lng = candidateLng
+        if (!crowded) break
+      }
+      here.push({ lat, lng })
+      placed.push({ region: box.region, lat, lng })
+    }
+  })
+
+  for (let i = statuses.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1))
+    ;[statuses[i], statuses[j]] = [statuses[j], statuses[i]]
+  }
+
   return statuses.map((status, i) => {
-    const hub = KSA_HUBS[i % KSA_HUBS.length]
-    const southern = hub.lat < 18.5
-    const latJitter = southern ? rand() * 0.22 : (rand() - 0.5) * 0.36
-    const lngJitter = (rand() - 0.5) * (southern ? 0.22 : 0.36)
-    const pinned = clampInsideKsa(hub.lat + latJitter, hub.lng + lngJitter)
+    const spot = placed[i % placed.length]
     return {
       id: `SN-${String(i + 1).padStart(3, '0')}`,
-      lat: pinned.lat,
-      lng: pinned.lng,
+      lat: spot.lat,
+      lng: spot.lng,
       status,
       type: SENSOR_TYPES[i % SENSOR_TYPES.length],
-      unit: `Unit ${i + 1} · ${hub.region}`,
+      unit: `Unit ${i + 1} · ${spot.region}`,
     }
   })
 }
@@ -225,17 +375,42 @@ export const IMPACT = {
   organicTons: 1840,
 }
 
-export const LAND_UNITS = [
-  { id: 'U-012', status: 'active' as const, ha: 20, mw: 1.2, lat: 24.7136, lng: 46.6753, region: 'Riyadh' },
-  { id: 'U-033', status: 'active' as const, ha: 20, mw: 1.2, lat: 21.4858, lng: 39.1925, region: 'Jeddah' },
-  { id: 'U-041', status: 'prepared' as const, ha: 20, mw: 1.2, lat: 24.5247, lng: 39.5692, region: 'Madinah' },
-  { id: 'U-067', status: 'active' as const, ha: 20, mw: 1.2, lat: 26.4207, lng: 50.0888, region: 'Eastern Province' },
-  { id: 'U-088', status: 'prep' as const, ha: 20, mw: 1.2, lat: 28.3838, lng: 36.5550, region: 'Tabuk' },
-  { id: 'U-102', status: 'prepared' as const, ha: 20, mw: 1.2, lat: 26.6080, lng: 37.9230, region: 'AlUla' },
-  { id: 'U-140', status: 'prep' as const, ha: 20, mw: 1.2, lat: 17.72, lng: 44.18, region: 'Najran' },
-  { id: 'U-188', status: 'active' as const, ha: 20, mw: 1.2, lat: 26.3260, lng: 43.9750, region: 'Qassim' },
-  { id: 'U-214', status: 'active' as const, ha: 20, mw: 1.2, lat: 17.12, lng: 42.68, region: 'Jazan' },
-  { id: 'U-301', status: 'prep' as const, ha: 20, mw: 1.2, lat: 29.9697, lng: 40.2064, region: 'Al Jawf' },
+export const PARTIES = {
+  nakheel: 'Al-Nakheel Holdings',
+  waha: 'Waha Desert Estates',
+  state: 'Public land (state)',
+  gulf: 'Gulf Green Capital',
+} as const
+
+export type LandStatus = 'active' | 'prepared' | 'prep'
+
+export type LandUnit = {
+  id: string
+  status: LandStatus
+  ha: number
+  mw: number
+  lat: number
+  lng: number
+  region: string
+  ownerId: keyof typeof PARTIES
+  crop: string
+  /** Government seed: external investors may exploit this parcel. */
+  openToInvestors: boolean
+  /** Proprietor decision. Filled from local state at runtime. */
+  offer?: 'private' | 'sale' | 'exploit'
+}
+
+export const LAND_UNITS: LandUnit[] = [
+  { id: 'U-012', status: 'active', ha: 20, mw: 1.2, lat: 24.7136, lng: 46.6753, region: 'Riyadh', ownerId: 'nakheel', crop: 'Dates', openToInvestors: false },
+  { id: 'U-033', status: 'active', ha: 20, mw: 1.2, lat: 21.4858, lng: 39.1925, region: 'Jeddah', ownerId: 'nakheel', crop: 'Vegetables', openToInvestors: true },
+  { id: 'U-041', status: 'prepared', ha: 20, mw: 1.2, lat: 24.5247, lng: 39.5692, region: 'Madinah', ownerId: 'waha', crop: 'Forage', openToInvestors: false },
+  { id: 'U-067', status: 'active', ha: 20, mw: 1.2, lat: 26.4207, lng: 50.0888, region: 'Eastern Province', ownerId: 'nakheel', crop: 'Forage', openToInvestors: true },
+  { id: 'U-088', status: 'prep', ha: 20, mw: 1.2, lat: 28.3838, lng: 36.555, region: 'Tabuk', ownerId: 'state', crop: 'Pilot', openToInvestors: false },
+  { id: 'U-102', status: 'prepared', ha: 20, mw: 1.2, lat: 26.608, lng: 37.923, region: 'AlUla', ownerId: 'waha', crop: 'Dates', openToInvestors: true },
+  { id: 'U-140', status: 'prep', ha: 20, mw: 1.2, lat: 17.72, lng: 44.18, region: 'Najran', ownerId: 'state', crop: 'Pilot', openToInvestors: false },
+  { id: 'U-188', status: 'active', ha: 20, mw: 1.2, lat: 26.326, lng: 43.975, region: 'Qassim', ownerId: 'nakheel', crop: 'Vegetables', openToInvestors: false },
+  { id: 'U-214', status: 'active', ha: 20, mw: 1.2, lat: 17.12, lng: 42.68, region: 'Jazan', ownerId: 'waha', crop: 'Forage', openToInvestors: false },
+  { id: 'U-301', status: 'prep', ha: 20, mw: 1.2, lat: 29.9697, lng: 40.2064, region: 'Al Jawf', ownerId: 'state', crop: 'Pilot', openToInvestors: false },
 ]
 
 export const LAND_SUMMARY = {

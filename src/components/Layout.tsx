@@ -16,8 +16,13 @@ import {
   Bell,
   Leaf,
   Sparkles,
+  Unlock,
+  Handshake,
+  LogOut,
 } from 'lucide-react'
-import { BRAND, NAV } from '../data/namaa'
+import { BRAND, navFor } from '../data/namaa'
+import { useAuth } from '../auth'
+import { useI18n } from '../i18n'
 import { cx } from '../lib/format'
 
 const ICONS: Record<string, ComponentType<{ size?: number }>> = {
@@ -31,9 +36,14 @@ const ICONS: Record<string, ComponentType<{ size?: number }>> = {
   land: Map,
   ratios: Gauge,
   goals: Target,
+  unlock: Unlock,
+  handshake: Handshake,
 }
 
 function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+  const { user, logout } = useAuth()
+  const { t } = useI18n()
+  const nav = navFor(user?.role ?? 'government')
   return (
     <div className="flex h-full flex-col">
       <Link to="/" onClick={onNavigate} className="flex items-center gap-3 px-5 py-5">
@@ -45,16 +55,16 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             {BRAND.nameAr} {BRAND.name}
           </div>
           <div className="text-[10px] font-medium uppercase tracking-widest text-leaf-300">
-            {BRAND.tagline}
+            {t(BRAND.tagline)}
           </div>
         </div>
       </Link>
 
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 pb-6">
-        {NAV.map((group) => (
+        {nav.map((group) => (
           <div key={group.id}>
             <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-emerald-200/50">
-              {group.title}
+              {t(group.title)}
             </div>
             <div className="space-y-0.5">
               {group.items.map((item) => {
@@ -75,7 +85,7 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                     }
                   >
                     <Icon size={17} />
-                    <span className="truncate">{item.name}</span>
+                    <span className="truncate">{t(item.name)}</span>
                   </NavLink>
                 )
               })}
@@ -86,13 +96,20 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
       <div className="mx-3 mb-4 rounded-2xl bg-gradient-to-br from-solar-500/90 to-leaf-700 p-4 text-emerald-950">
         <div className="text-xs font-bold uppercase tracking-wide text-emerald-950/70">
-          Prepared by
+          {t('Prepared by')}
         </div>
         <div className="mt-1 text-sm font-bold">{BRAND.preparedBy}</div>
         <div className="text-xs text-emerald-950/70">{BRAND.preparedByAr}</div>
         <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-950/90">
-          <Sparkles size={14} /> Vision 2030 Ready
+          <Sparkles size={14} /> {t(user?.title ?? 'Vision 2030')}
         </div>
+        <button
+          type="button"
+          onClick={logout}
+          className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-950/80"
+        >
+          <LogOut size={14} /> {t('Sign out')}
+        </button>
       </div>
     </div>
   )
@@ -100,9 +117,12 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
 export default function Layout() {
   const [open, setOpen] = useState(false)
+  const { user } = useAuth()
+  const { t, toggle, languageLabel } = useI18n()
   const location = useLocation()
+  const nav = navFor(user?.role ?? 'government')
   const current =
-    NAV.flatMap((g) => g.items).find((i) => i.path === location.pathname)?.name ??
+    nav.flatMap((g) => g.items).find((i) => i.path === location.pathname)?.name ??
     'NAMAA'
 
   return (
@@ -112,11 +132,11 @@ export default function Layout() {
       </aside>
 
       {open && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-[1100] lg:hidden">
           <div className="absolute inset-0 bg-emerald-950/50" onClick={() => setOpen(false)} />
-          <aside className="absolute left-0 top-0 h-full w-72 bg-ink-950">
+          <aside className="absolute start-0 top-0 h-full w-72 bg-ink-950">
             <button
-              className="absolute right-3 top-4 text-emerald-200"
+              className="absolute end-3 top-4 text-emerald-200"
               onClick={() => setOpen(false)}
             >
               <X size={20} />
@@ -137,22 +157,29 @@ export default function Layout() {
           <div className="hidden text-sm text-emerald-900/50 sm:block">
             <span className="font-medium">NAMAA</span>
             <span className="mx-2">/</span>
-            <span className="font-semibold text-emerald-950">{current}</span>
+            <span className="font-semibold text-emerald-950">{t(current)}</span>
           </div>
-          <div className="ml-auto flex items-center gap-2">
-            <button className="relative grid size-9 place-items-center rounded-lg text-emerald-800 hover:bg-leaf-50">
+          <div className="ms-auto flex items-center gap-2">
+            <button
+            type="button"
+            onClick={toggle}
+            className="rounded-full border border-emerald-900/10 bg-white/80 px-3 py-1.5 text-xs font-semibold text-emerald-950"
+          >
+            {languageLabel}
+          </button>
+          <button className="relative grid size-9 place-items-center rounded-lg text-emerald-800 hover:bg-leaf-50">
               <Bell size={18} />
               <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-solar-500 ring-2 ring-white" />
             </button>
             <div className="flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/80 py-1 pl-1 pr-3">
               <div className="grid size-7 place-items-center rounded-full bg-gradient-to-br from-leaf-500 to-leaf-800 text-[10px] font-bold text-white">
-                FB
+                {user?.initials ?? 'NA'}
               </div>
               <div className="hidden sm:block">
                 <div className="text-xs font-semibold leading-none text-emerald-950">
-                  F. Ben Feguir
+                  {t(user?.name ?? 'NAMAA')}
                 </div>
-                <div className="text-[10px] text-emerald-800/50">Project lead</div>
+                <div className="text-[10px] text-emerald-800/50">{t(user?.title ?? '')}</div>
               </div>
             </div>
           </div>

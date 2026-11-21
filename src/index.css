@@ -40,6 +40,10 @@ body,
   height: 100%;
 }
 
+html[dir='rtl'] body {
+  font-family: 'IBM Plex Sans Arabic', var(--font-sans);
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -77,6 +81,12 @@ body {
 .glass {
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(12px);
+}
+
+/* Leaflet panes use z-index up to 1000. Keep them inside the map
+   so they don't cover the sidebar or the mobile menu. */
+.leaflet-container {
+  z-index: 0;
 }
 
 .ksa-map-label {

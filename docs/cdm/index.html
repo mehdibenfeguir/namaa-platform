@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>NAMAA Conceptual Data Model</title>
+<style>
+  :root {
+    --ink: #1a2b24;
+    --muted: #5c6d65;
+    --line: #d5ddd8;
+    --green: #1c5c3d;
+    --pale: #e7f2eb;
+    --gold: #8d6a22;
+    --gold-pale: #f8f1de;
+    --blue: #1d4e6e;
+    --blue-pale: #e7f1f7;
+    --sand: #7a6240;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+    font-family: "Iowan Old Style", Palatino, Georgia, serif;
+    font-size: 11pt;
+    line-height: 1.45;
+    background: white;
+  }
+  h1, h2, h3, table, figcaption, .kicker, .sans, th, td {
+    font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  .ar {
+    font-family: "Geeza Pro", "SF Arabic", "Noto Naskh Arabic", "Arial", sans-serif;
+    direction: rtl;
+    unicode-bidi: isolate;
+  }
+  h1 {
+    font-size: 18.5pt;
+    line-height: 1.2;
+    color: var(--green);
+    font-weight: 700;
+    margin: 18px 0 8px;
+    letter-spacing: -0.02em;
+    break-after: avoid;
+  }
+  h1 .num {
+    display: block;
+    font-size: 9pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-size: 13pt;
+    color: var(--green);
+    margin: 14px 0 6px;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8px; }
+  ul { margin: 4px 0 10px; padding-left: 1.15em; }
+  li { margin: 0 0 3px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 12px;
+    font-size: 9pt;
+    line-height: 1.35;
+    break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 4px 6px;
+    vertical-align: top;
+    text-align: left;
+  }
+  th { background: var(--pale); color: var(--green); font-weight: 700; }
+  tr { break-inside: avoid; }
+  figure { margin: 10px 0 14px; break-inside: avoid; }
+  figcaption { font-size: 8.5pt; color: var(--muted); margin-top: 4px; }
+  svg { width: 100%; height: auto; display: block; }
+  .rule { height: 3px; background: var(--green); margin: 8px 0 12px; }
+  .kicker {
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .callout {
+    break-inside: avoid;
+    border: 1px solid #e3d3a4;
+    background: var(--gold-pale);
+    padding: 8px 10px;
+    margin: 8px 0 12px;
+    font-size: 10pt;
+  }
+  .small { font-size: 9.5pt; color: var(--muted); }
+  @page { size: A4; margin: 16mm 14mm 16mm; }
+</style>
+</head>
+<body>
+
+<section>
+  <div style="background:#143628; color:#f4f7f2; padding:28px 32px 26px;">
+    <div class="kicker" style="color:#e6c56b;">NAMAA-CDM-001 · Version 1.0 · 22 November 2026</div>
+    <div style="font-family:Geeza Pro, 'SF Arabic', sans-serif; font-size:13pt; margin-top:18px; color:#d7ebe0;">نماء</div>
+    <div style="font-family:'Avenir Next',Helvetica,sans-serif; font-size:28pt; font-weight:700; line-height:1.05; margin-top:4px;">Conceptual Data Model</div>
+    <div style="font-family:'Avenir Next',Helvetica,sans-serif; font-size:13pt; font-weight:600; margin-top:10px; max-width:640px;">Namaa : Toward Sustainable Investment of Underutilized Lands in the Kingdom.</div>
+    <div style="margin-top:10px; font-size:11.5pt; color:#d7ebe0; max-width:640px;">A digital platform that seamlessly and transparently connects underutilized lands with reclamation, rehabilitation, and investment opportunities.</div>
+  </div>
+  <div style="padding:16px 4px 0;">
+    <table>
+      <tr><th>Item</th><th>Value</th></tr>
+      <tr><td>Document ID</td><td>NAMAA-CDM-001</td></tr>
+      <tr><td>Document</td><td>Conceptual Data Model</td></tr>
+      <tr><td>System</td><td>Namaa portal</td></tr>
+      <tr><td>Status</td><td>Matches the current demo</td></tr>
+      <tr><td>Date</td><td>22 November 2026</td></tr>
+      <tr><td>Language</td><td>English, with the Arabic names used in the product</td></tr>
+    </table>
+    <p>This model describes business concepts and the rules that connect them. It is not a database schema.</p>
+  </div>
+</section>
+
+<h1><span class="num">01</span>Purpose</h1>
+<div class="rule"></div>
+<p>Namaa lets three kinds of party work on the same land record.</p>
+<ul>
+  <li><strong>Government</strong> runs the national view and decides only <strong>public land</strong>.</li>
+  <li><strong>A proprietor</strong> decides their own parcels: keep them private, offer them for sale, or open them for exploitation.</li>
+  <li><strong>An investor</strong> sees only what is offered, then asks to buy or to exploit.</li>
+</ul>
+
+<figure>
+  <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three parties around one parcel">
+    <rect width="980" height="250" fill="#f7faf8"/>
+    <rect x="360" y="78" width="260" height="92" rx="12" fill="#143628"/>
+    <text x="490" y="112" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#fff">Land parcel</text>
+    <text x="490" y="134" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">One owner · one current offer</text>
+    <text x="490" y="152" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">Private, for sale, or open</text>
+
+    <rect x="24" y="28" width="230" height="72" rx="10" fill="#fff" stroke="#1d4e6e" stroke-width="1.6"/>
+    <text x="139" y="56" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4e6e">Government</text>
+    <text x="139" y="76" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Public land only</text>
+    <path d="M254 64 H360" stroke="#1d4e6e" stroke-width="1.6" marker-end="url(#arrBlue)"/>
+
+    <rect x="24" y="150" width="230" height="72" rx="10" fill="#fff" stroke="#1c5c3d" stroke-width="1.6"/>
+    <text x="139" y="178" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1c5c3d">Proprietor</text>
+    <text x="139" y="198" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Their own estate</text>
+    <path d="M254 186 H360" stroke="#1c5c3d" stroke-width="1.6" marker-end="url(#arrGreen)"/>
+
+    <rect x="726" y="88" width="230" height="72" rx="10" fill="#fff" stroke="#8d6a22" stroke-width="1.6"/>
+    <text x="841" y="116" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#8d6a22">Investor</text>
+    <text x="841" y="136" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Buy or exploit what is offered</text>
+    <path d="M726 124 H620" stroke="#8d6a22" stroke-width="1.6" marker-end="url(#arrGold)"/>
+
+    <defs>
+      <marker id="arrBlue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1d4e6e"/></marker>
+      <marker id="arrGreen" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+      <marker id="arrGold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8d6a22"/></marker>
+    </defs>
+  </svg>
+  <figcaption>Figure 1. Government decides public land. A proprietor decides their estate. An investor can only act on land that is offered.</figcaption>
+</figure>
+
+<h1><span class="num">02</span>Subject areas</h1>
+<div class="rule"></div>
+
+<figure>
+  <svg viewBox="0 0 980 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Subject areas">
+    <rect width="980" height="280" fill="#f7faf8"/>
+    <rect x="30" y="36" width="200" height="78" rx="10" fill="#1d4e6e"/>
+    <text x="130" y="68" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Party and account</text>
+    <text x="130" y="90" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d6eaf3">Who signs in</text>
+
+    <rect x="310" y="36" width="230" height="78" rx="10" fill="#1c5c3d"/>
+    <text x="425" y="68" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Land parcel and offer</text>
+    <text x="425" y="90" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">Private, sale, or exploit</text>
+
+    <rect x="620" y="36" width="220" height="78" rx="10" fill="#8d6a22"/>
+    <text x="730" y="68" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Investment request</text>
+    <text x="730" y="90" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#f8f1de">Buy or exploit</text>
+
+    <rect x="310" y="176" width="230" height="72" rx="10" fill="#fff" stroke="#1c5c3d" stroke-width="1.6"/>
+    <text x="425" y="206" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1c5c3d">Operations</text>
+    <text x="425" y="226" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Sensors, water, energy, cost</text>
+
+    <path d="M230 75 H310" stroke="#1a2b24" stroke-width="1.6" marker-end="url(#arrInk)"/>
+    <path d="M540 75 H620" stroke="#1a2b24" stroke-width="1.6" marker-end="url(#arrInk)"/>
+    <path d="M130 114 C130 200 250 212 310 212" fill="none" stroke="#1d4e6e" stroke-width="1.4" marker-end="url(#arrBlue2)"/>
+    <path d="M425 114 V176" stroke="#1c5c3d" stroke-width="1.6" marker-end="url(#arrGreen2)"/>
+    <text x="268" y="64" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">owns</text>
+    <text x="548" y="64" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">receives</text>
+    <text x="150" y="168" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1d4e6e">investor submits</text>
+    <text x="434" y="152" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1c5c3d">monitored</text>
+    <defs>
+      <marker id="arrInk" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+      <marker id="arrBlue2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1d4e6e"/></marker>
+      <marker id="arrGreen2" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+  </svg>
+  <figcaption>Figure 2. Four subject areas. The first three are the investment path. Operations is the government view of land already being reclaimed.</figcaption>
+</figure>
+
+<table>
+  <tr><th>Subject area</th><th>What it holds</th></tr>
+  <tr><td>Party and account</td><td>Who can sign in, and which estate or office they represent</td></tr>
+  <tr><td>Land parcel and offer</td><td>A unit of land, who owns it, and whether it is private, for sale, or open for exploitation</td></tr>
+  <tr><td>Investment request</td><td>An investor’s ask to buy or exploit, and the decision on that ask</td></tr>
+  <tr><td>Operations</td><td>Sensors, irrigation, cultivation, energy, and cost on land already in the program</td></tr>
+</table>
+
+<h1><span class="num">03</span>Party and account</h1>
+<div class="rule"></div>
+<h2>Party</h2>
+<p>A party is an organization, not a login.</p>
+<table>
+  <tr><th>Attribute</th><th>Meaning</th></tr>
+  <tr><td>Party id</td><td>Stable code: mewa, nakheel, waha, state, gulf</td></tr>
+  <tr><td>Name</td><td>Display name in English and Arabic</td></tr>
+  <tr><td>Kind</td><td>government, proprietor, investor, or public</td></tr>
+</table>
+<p><code style="font-family:ui-monospace,Menlo,monospace;font-size:9pt;">public</code> is the state as landowner. The government account acts for that land. It is not a second owner.</p>
+<table>
+  <tr><th>Party</th><th>Arabic name</th><th>Kind</th></tr>
+  <tr><td>MEWA Operator</td><td class="ar">مشغّل الوزارة</td><td>Government</td></tr>
+  <tr><td>Al-Nakheel Holdings</td><td class="ar">مجموعة النخيل</td><td>Proprietor</td></tr>
+  <tr><td>Waha Desert Estates</td><td class="ar">واحة العقارية</td><td>Proprietor</td></tr>
+  <tr><td>Public land (state)</td><td class="ar">أرض عامة (الدولة)</td><td>Public</td></tr>
+  <tr><td>Gulf Green Capital</td><td class="ar">الخليج الأخضر</td><td>Investor</td></tr>
+</table>
+
+<h2>Account</h2>
+<p>An account is how a person enters the portal on behalf of one party. One party can have many accounts later. In the demo, each party has one. The shared demo password is <strong>namaa</strong>.</p>
+<table>
+  <tr><th>Email</th><th>Role</th><th>Party</th></tr>
+  <tr><td>gov@namaa.sa</td><td>Government</td><td>MEWA</td></tr>
+  <tr><td>owner@namaa.sa</td><td>Proprietor</td><td>Al-Nakheel Holdings</td></tr>
+  <tr><td>waha@namaa.sa</td><td>Proprietor</td><td>Waha Desert Estates</td></tr>
+  <tr><td>investor@namaa.sa</td><td>Investor</td><td>Gulf Green Capital</td></tr>
+</table>
+
+<h1><span class="num">04</span>Land parcel and offer</h1>
+<div class="rule"></div>
+<p>A parcel is one registered unit inside the Kingdom. It has one owner, a region, a location inland, area in hectares, power in megawatts, a crop, a cultivation status, and one current offer.</p>
+<table>
+  <tr><th>Attribute</th><th>Meaning</th></tr>
+  <tr><td>Parcel id</td><td>Such as U-012</td></tr>
+  <tr><td>Owner</td><td>A proprietor party, or public land</td></tr>
+  <tr><td>Region</td><td>Riyadh, Jeddah, Madinah, Eastern Province, Tabuk, AlUla, Najran, Qassim, Jazan, Al Jawf</td></tr>
+  <tr><td>Cultivation status</td><td>Active cultivation, prepared, or under preparation</td></tr>
+  <tr><td>Offer</td><td>The current commercial position: private, for sale, or open for exploitation</td></tr>
+</table>
+<p>National targets sit above the parcel: a 10,000 ha reclamation target, a planned unit count, and reclaimed area. Those figures describe the program. They are not attributes of one parcel.</p>
+
+<figure>
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Offer choices">
+    <rect width="980" height="300" fill="#f7faf8"/>
+    <rect x="370" y="18" width="240" height="64" rx="10" fill="#5c6d65"/>
+    <text x="490" y="46" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#fff">Kept private</text>
+    <text x="490" y="66" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#f4f7f2">أبقِها خاصة</text>
+
+    <rect x="70" y="170" width="250" height="78" rx="10" fill="#8d6a22"/>
+    <text x="195" y="200" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#fff">For sale</text>
+    <text x="195" y="222" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="13" fill="#f8f1de">بيع</text>
+
+    <rect x="660" y="170" width="250" height="78" rx="10" fill="#1c5c3d"/>
+    <text x="785" y="200" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#fff">Open for exploitation</text>
+    <text x="785" y="222" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#d7ebe0">مفتوح للاستغلال</text>
+
+    <path d="M430 82 C300 110 230 140 195 170" fill="none" stroke="#8d6a22" stroke-width="1.6" marker-end="url(#g3)"/>
+    <path d="M550 82 C680 110 740 140 785 170" fill="none" stroke="#1c5c3d" stroke-width="1.6" marker-end="url(#g4)"/>
+    <path d="M195 170 C250 120 360 100 430 82" fill="none" stroke="#5c6d65" stroke-width="1.3" marker-end="url(#g5)"/>
+    <path d="M785 170 C730 120 640 100 550 82" fill="none" stroke="#5c6d65" stroke-width="1.3" marker-end="url(#g5)"/>
+    <path d="M320 209 H660" stroke="#1a2b24" stroke-width="1.5" marker-end="url(#g6)"/>
+    <path d="M660 228 H320" stroke="#1a2b24" stroke-width="1.5" marker-end="url(#g6)"/>
+
+    <text x="250" y="128" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#8d6a22">Sell</text>
+    <text x="680" y="128" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1c5c3d">Open</text>
+    <text x="250" y="156" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Keep private</text>
+    <text x="660" y="156" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Keep private</text>
+    <text x="490" y="202" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1a2b24">Switch</text>
+    <text x="490" y="246" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1a2b24">Switch</text>
+    <defs>
+      <marker id="g3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8d6a22"/></marker>
+      <marker id="g4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+      <marker id="g5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#5c6d65"/></marker>
+      <marker id="g6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+    </defs>
+  </svg>
+  <figcaption>Figure 3. One current offer. The proprietor sets it on their parcels. The government sets it only on public land.</figcaption>
+</figure>
+
+<table>
+  <tr><th>Offer</th><th>Arabic</th><th>Who may set it</th><th>What an investor sees</th></tr>
+  <tr><td>private</td><td class="ar">أبقِها خاصة</td><td>The owner</td><td>Nothing. The parcel is hidden.</td></tr>
+  <tr><td>sale</td><td class="ar">بيع</td><td>The owner</td><td>The parcel, with Buy the land</td></tr>
+  <tr><td>exploit</td><td class="ar">مفتوح للاستغلال</td><td>The owner</td><td>The parcel, with Exploit the land</td></tr>
+</table>
+<div class="callout"><strong>Owner.</strong> For a private estate, the owner is the proprietor (مجموعة النخيل or الواحة العقارية). For public land, the owner is the government. The government cannot change a private offer. A proprietor cannot change another estate.</div>
+
+<h1><span class="num">05</span>Investment request</h1>
+<div class="rule"></div>
+<p>A request is one investor asking for one parcel. Kind is buy or exploit. Status is pending, accepted, or refused.</p>
+
+<figure>
+  <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Request lifecycle">
+    <rect width="980" height="250" fill="#f7faf8"/>
+    <rect x="30" y="86" width="170" height="64" rx="10" fill="#fff" stroke="#8d6a22" stroke-width="1.6"/>
+    <text x="115" y="114" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#8d6a22">Investor asks</text>
+    <text x="115" y="132" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Kind matches the offer</text>
+
+    <rect x="270" y="86" width="160" height="64" rx="10" fill="#f8f1de" stroke="#8d6a22" stroke-width="1.6"/>
+    <text x="350" y="124" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#8d6a22">Pending</text>
+
+    <rect x="530" y="28" width="180" height="58" rx="10" fill="#1c5c3d"/>
+    <text x="620" y="62" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Accepted</text>
+
+    <rect x="530" y="150" width="180" height="58" rx="10" fill="#8a3b34"/>
+    <text x="620" y="184" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Refused</text>
+
+    <rect x="780" y="86" width="170" height="64" rx="10" fill="#fff" stroke="#5c6d65" stroke-width="1.6"/>
+    <text x="865" y="114" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#5c6d65">Withdrawn</text>
+    <text x="865" y="132" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Removed</text>
+
+    <path d="M200 118 H270" stroke="#1a2b24" stroke-width="1.5" marker-end="url(#ink2)"/>
+    <path d="M430 104 C480 80 500 70 530 62" fill="none" stroke="#1c5c3d" stroke-width="1.5" marker-end="url(#ok)"/>
+    <path d="M430 132 C480 160 500 176 530 180" fill="none" stroke="#8a3b34" stroke-width="1.5" marker-end="url(#no)"/>
+    <path d="M350 86 C350 12 780 12 865 86" fill="none" stroke="#5c6d65" stroke-width="1.4" marker-end="url(#grey)"/>
+    <text x="470" y="78" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1c5c3d">Accept</text>
+    <text x="470" y="168" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#8a3b34">Refuse</text>
+    <text x="200" y="22" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Investor withdraws while pending</text>
+    <defs>
+      <marker id="ink2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+      <marker id="ok" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+      <marker id="no" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8a3b34"/></marker>
+      <marker id="grey" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#5c6d65"/></marker>
+    </defs>
+  </svg>
+  <figcaption>Figure 4. A request stays pending until the owner accepts or refuses it, or the investor withdraws it. A refused request can be sent again.</figcaption>
+</figure>
+
+<table>
+  <tr><th>Rule</th><th>Detail</th></tr>
+  <tr><td>Buy</td><td>Allowed only while the offer is for sale</td></tr>
+  <tr><td>Exploit</td><td>Allowed only while the offer is open for exploitation</td></tr>
+  <tr><td>One live request</td><td>One investor, one parcel. A refused request can be sent again</td></tr>
+  <tr><td>Withdraw</td><td>Only while pending. Withdraw removes the request</td></tr>
+  <tr><td>Decision</td><td>Accept and refuse are stored on the same request. Proprietor and investor both see the result</td></tr>
+</table>
+<table>
+  <tr><th>Land</th><th>Who accepts or refuses</th></tr>
+  <tr><td>Private parcel</td><td>That parcel’s proprietor only</td></tr>
+  <tr><td>Public land</td><td>Government only</td></tr>
+</table>
+<p>The government can see that private land is offered. It does not accept or refuse those requests. Changing the offer does not delete an existing request. The investor then sees that the parcel is no longer offered for that kind of deal.</p>
+
+<h1><span class="num">06</span>Relationships</h1>
+<div class="rule"></div>
+
+<figure>
+  <svg viewBox="0 0 980 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Entity relationships">
+    <rect width="980" height="460" fill="#f7faf8"/>
+
+    <rect x="36" y="28" width="200" height="86" rx="8" fill="#1d4e6e"/>
+    <text x="136" y="58" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">PARTY</text>
+    <text x="136" y="78" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d6eaf3">id · name · kind</text>
+    <text x="136" y="96" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d6eaf3">government, owner, investor, public</text>
+
+    <rect x="36" y="180" width="200" height="72" rx="8" fill="#fff" stroke="#1d4e6e" stroke-width="1.5"/>
+    <text x="136" y="208" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4e6e">ACCOUNT</text>
+    <text x="136" y="230" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">email · role · party</text>
+
+    <rect x="360" y="96" width="250" height="100" rx="8" fill="#143628"/>
+    <text x="485" y="132" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">LAND PARCEL</text>
+    <text x="485" y="154" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">id · region · ha · MW · crop</text>
+    <text x="485" y="172" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">cultivation status · owner</text>
+
+    <rect x="700" y="28" width="240" height="72" rx="8" fill="#fff" stroke="#8d6a22" stroke-width="1.5"/>
+    <text x="820" y="56" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#8d6a22">OFFER</text>
+    <text x="820" y="78" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">private · sale · exploit</text>
+
+    <rect x="700" y="160" width="240" height="86" rx="8" fill="#fff" stroke="#8d6a22" stroke-width="1.5"/>
+    <text x="820" y="190" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#8d6a22">INVESTMENT REQUEST</text>
+    <text x="820" y="210" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">kind: buy or exploit</text>
+    <text x="820" y="228" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">pending · accepted · refused</text>
+
+    <rect x="360" y="300" width="180" height="70" rx="8" fill="#fff" stroke="#1c5c3d" stroke-width="1.5"/>
+    <text x="450" y="330" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1c5c3d">SENSOR</text>
+    <text x="450" y="350" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">online · degraded · offline</text>
+
+    <rect x="570" y="300" width="220" height="70" rx="8" fill="#fff" stroke="#1c5c3d" stroke-width="1.5"/>
+    <text x="680" y="330" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#1c5c3d">IRRIGATION ZONE</text>
+    <text x="680" y="350" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">duty · water saved · next run</text>
+
+    <path d="M136 114 V180" stroke="#1d4e6e" stroke-width="1.4" marker-end="url(#b)"/>
+    <text x="146" y="154" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1d4e6e">1 to many · signs in as</text>
+
+    <path d="M236 70 H360" stroke="#1a2b24" stroke-width="1.4" marker-end="url(#k)"/>
+    <text x="250" y="62" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1a2b24">owns 1</text>
+
+    <path d="M610 120 H700" stroke="#8d6a22" stroke-width="1.4" marker-end="url(#g)"/>
+    <text x="618" y="112" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#8d6a22">1 current</text>
+
+    <path d="M610 170 H700" stroke="#8d6a22" stroke-width="1.4" marker-end="url(#g)"/>
+    <text x="618" y="188" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#8d6a22">0 to many</text>
+
+    <path d="M136 114 C136 20 820 8 820 28" fill="none" stroke="#1d4e6e" stroke-width="1.2"/>
+    <text x="400" y="18" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1d4e6e">investor submits the request</text>
+
+    <path d="M450 196 V300" stroke="#1c5c3d" stroke-width="1.3" marker-end="url(#gr)"/>
+    <path d="M560 196 C620 240 680 260 680 300" fill="none" stroke="#1c5c3d" stroke-width="1.3" marker-end="url(#gr)"/>
+    <text x="400" y="270" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1c5c3d">monitored on reclaimed land</text>
+
+    <defs>
+      <marker id="b" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1d4e6e"/></marker>
+      <marker id="k" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+      <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8d6a22"/></marker>
+      <marker id="gr" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+  </svg>
+  <figcaption>Figure 5. A party owns parcels and signs in through accounts. Each parcel has one offer and any number of requests. Sensors and irrigation describe land already in the program.</figcaption>
+</figure>
+
+<table>
+  <tr><th>From</th><th>To</th><th>Rule</th></tr>
+  <tr><td>Party</td><td>Account</td><td>An account acts for exactly one party</td></tr>
+  <tr><td>Party</td><td>Land parcel</td><td>A parcel has exactly one owner</td></tr>
+  <tr><td>Land parcel</td><td>Offer</td><td>Exactly one current offer</td></tr>
+  <tr><td>Land parcel</td><td>Investment request</td><td>Zero or many requests, one per investor</td></tr>
+  <tr><td>Party (investor)</td><td>Investment request</td><td>The investor who sent it</td></tr>
+  <tr><td>Land parcel</td><td>Sensor, irrigation</td><td>Operational readings for land already in the program</td></tr>
+</table>
+
+<h1><span class="num">07</span>Operations</h1>
+<div class="rule"></div>
+<p>These concepts support the government dashboard. They do not decide a sale or an exploitation. A sensor reading does not change who owns a parcel or whether it is for sale.</p>
+<table>
+  <tr><th>Concept</th><th>What it records</th></tr>
+  <tr><td>Sensor</td><td>A field device: id, location, type, and status online, degraded, or offline</td></tr>
+  <tr><td>Irrigation zone</td><td>A group of units, duty cycle, water saved, and next run</td></tr>
+  <tr><td>Cultivation module</td><td>A controlled-environment crop with climate and yield</td></tr>
+  <tr><td>Energy reading</td><td>Generation, pumping load, and battery across the day</td></tr>
+  <tr><td>Cost line</td><td>Planned and actual capital or operating cost</td></tr>
+  <tr><td>Program impact</td><td>Reclaimed hectares, water saved, and avoided emissions for the program as a whole</td></tr>
+</table>
+
+<h1><span class="num">08</span>What each role may see</h1>
+<div class="rule"></div>
+<table>
+  <tr><th>Concept</th><th>Government</th><th>Proprietor</th><th>Investor</th></tr>
+  <tr><td>Parcels on the map</td><td>All parcels</td><td>Their estate only</td><td>Sale and exploitation only</td></tr>
+  <tr><td>Set the offer</td><td>Public land only</td><td>Their parcels only</td><td>No</td></tr>
+  <tr><td>Accept or refuse</td><td>Public land only</td><td>Their parcels only</td><td>No</td></tr>
+  <tr><td>Send a request</td><td>No</td><td>No</td><td>Yes, when the offer matches</td></tr>
+  <tr><td>Withdraw a pending request</td><td>No</td><td>No</td><td>Their own request</td></tr>
+  <tr><td>Sensors, irrigation, energy, cost</td><td>Yes</td><td>No</td><td>No</td></tr>
+</table>
+
+<h1><span class="num">09</span>Demo parcels</h1>
+<div class="rule"></div>
+<table>
+  <tr><th>Parcel</th><th>Owner</th><th>Region</th><th>Crop</th><th>Cultivation</th></tr>
+  <tr><td>U-012</td><td class="ar">مجموعة النخيل</td><td>Riyadh</td><td>Dates</td><td>Active</td></tr>
+  <tr><td>U-033</td><td class="ar">مجموعة النخيل</td><td>Jeddah</td><td>Vegetables</td><td>Active</td></tr>
+  <tr><td>U-067</td><td class="ar">مجموعة النخيل</td><td>Eastern Province</td><td>Forage</td><td>Active</td></tr>
+  <tr><td>U-188</td><td class="ar">مجموعة النخيل</td><td>Qassim</td><td>Vegetables</td><td>Active</td></tr>
+  <tr><td>U-041</td><td class="ar">الواحة العقارية</td><td>Madinah</td><td>Forage</td><td>Prepared</td></tr>
+  <tr><td>U-102</td><td class="ar">الواحة العقارية</td><td>AlUla</td><td>Dates</td><td>Prepared</td></tr>
+  <tr><td>U-214</td><td class="ar">الواحة العقارية</td><td>Jazan</td><td>Forage</td><td>Active</td></tr>
+  <tr><td>U-088</td><td>Public land</td><td>Tabuk</td><td>Pilot</td><td>Under preparation</td></tr>
+  <tr><td>U-140</td><td>Public land</td><td>Najran</td><td>Pilot</td><td>Under preparation</td></tr>
+  <tr><td>U-301</td><td>Public land</td><td>Al Jawf</td><td>Pilot</td><td>Under preparation</td></tr>
+</table>
+<p class="small">The starting offer is for sale on U-012, open for exploitation where the parcel was already opened to investors, and private otherwise. People can change those offers in the portal. The changed offer and any requests stay in the browser for that demo.</p>
+
+</body>
+</html>

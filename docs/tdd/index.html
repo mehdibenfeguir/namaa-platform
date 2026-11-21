@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>NAMAA Technical Design Document</title>
+<style>
+  :root {
+    --ink: #1a2b24;
+    --muted: #5c6d65;
+    --line: #d5ddd8;
+    --paper: #fbfaf6;
+    --green: #1c5c3d;
+    --green-2: #2f7d52;
+    --pale: #e7f2eb;
+    --gold: #8d6a22;
+    --gold-pale: #f8f1de;
+    --blue: #1d4e6e;
+    --blue-pale: #e7f1f7;
+    --sand: #7a6240;
+    --sand-pale: #f6f0e6;
+    --red: #8a3b34;
+    --red-pale: #f8eeec;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    font-size: 11pt;
+    line-height: 1.45;
+    background: white;
+  }
+  h1, h2, h3, h4, .sans, table, figcaption, .meta, .kicker, .footer-note, code, pre {
+    font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  h1 {
+    break-before: auto;
+    break-after: avoid;
+    font-size: 18.5pt;
+    line-height: 1.2;
+    color: var(--green);
+    font-weight: 700;
+    margin: 18px 0 8px;
+    letter-spacing: -0.02em;
+  }
+  h1 .num {
+    display: block;
+    font-size: 9pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-size: 13pt;
+    color: var(--green);
+    margin: 16px 0 6px;
+    break-after: avoid;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 11.5pt;
+    margin: 12px 0 4px;
+    break-after: avoid;
+    color: #234237;
+  }
+  p { margin: 0 0 8px; }
+  ul, ol { margin: 4px 0 10px; padding-left: 1.15em; }
+  li { margin: 0 0 3px; }
+  strong { font-weight: 700; }
+  a { color: var(--blue); text-decoration: none; }
+  code, pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 8.4pt;
+  }
+  pre {
+    background: #f4f7f5;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--green);
+    padding: 8px 10px;
+    white-space: pre-wrap;
+    break-inside: avoid;
+    margin: 8px 0 12px;
+    line-height: 1.35;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 12px;
+    font-size: 9pt;
+    line-height: 1.35;
+    break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 4px 6px;
+    vertical-align: top;
+    text-align: left;
+  }
+  th {
+    background: var(--pale);
+    color: var(--green);
+    font-weight: 700;
+  }
+  tr { break-inside: avoid; }
+  figure {
+    margin: 10px 0 12px;
+    break-inside: avoid;
+  }
+  figcaption {
+    font-size: 8.5pt;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .callout {
+    break-inside: avoid;
+    border: 1px solid #e3d3a4;
+    background: var(--gold-pale);
+    padding: 8px 10px;
+    margin: 8px 0 12px;
+    font-size: 10pt;
+  }
+  .callout strong { color: var(--gold); }
+  .cover { break-before: auto; break-after: page; }
+  .cover h1 { break-before: auto; font-size: 32pt; line-height: 1.05; margin: 0; color: white; }
+  .rule { height: 3px; background: var(--green); margin: 8px 0 12px; }
+  .small { font-size: 9.5pt; color: var(--muted); }
+  .kicker {
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--gold);
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div style="background:#143628; color:#f4f7f2; padding:28px 32px 26px; margin:-2px -2px 0;">
+    <div class="kicker" style="color:#e6c56b;">NAMAA-TDD-001 · Version 1.1 · 22 November 2026</div>
+    <div style="font-family:'Avenir Next',Helvetica,sans-serif; font-size:13pt; margin-top:18px; color:#d7ebe0;">نماء</div>
+    <h1>NAMAA</h1>
+    <div style="font-family:'Avenir Next',Helvetica,sans-serif; font-size:16pt; font-weight:600; margin-top:6px;">Technical Design Document</div>
+    <div style="margin-top:8px; font-size:12.5pt; color:#d7ebe0;">Toward Sustainable Investment of Underutilized Lands in the Kingdom</div>
+    <div style="margin-top:22px; font-family:'Avenir Next',Helvetica,sans-serif; font-size:10.5pt; line-height:1.55; color:#f4f7f2;">
+      Google Cloud, Dammam (me-central2)<br/>
+      CKE workloads on Google Kubernetes Engine<br/>
+      Crossplane · Argo CD · LGTM in the Kingdom<br/>
+      Teleport · Cyfirma · MDR (vendor to be selected)
+    </div>
+  </div>
+  <div style="padding:18px 6px 0;">
+    <div class="kicker">Document status</div>
+    <p style="margin-top:6px;">Target production design. The repository today is a static demonstration of the operating console. This document specifies the system that replaces that demonstration: live farm units, closed-loop control, and an in-Kingdom operating platform.</p>
+    <table>
+      <tr><th>Item</th><th>Value</th></tr>
+      <tr><td>Document ID</td><td>NAMAA-TDD-001</td></tr>
+      <tr><td>Version</td><td>1.1 — revises 1.0 of 15 November 2026. Product name aligned with the console. MDR vendor left open</td></tr>
+      <tr><td>Date</td><td>22 November 2026</td></tr>
+      <tr><td>Classification</td><td>Internal</td></tr>
+      <tr><td>System</td><td>NAMAA (نماء) — Toward Sustainable Investment of Underutilized Lands in the Kingdom</td></tr>
+      <tr><td>Programme</td><td>Sustainable investment of underutilized lands · Vision 2030</td></tr>
+      <tr><td>Design point</td><td>500 farm units, 10,000 ha, 600 MW fleet, in the Kingdom of Saudi Arabia</td></tr>
+      <tr><td>Prototype</td><td>namaa-platform static console (React, Vite). Prepared in the product prototype by Fatma Ben Feguir.</td></tr>
+    </table>
+    <p class="small">Primary data, backups, and the LGTM observability stack stay in Google Cloud region me-central2 (Dammam). Disaster recovery is multi-zone inside that region. Failover to a region outside the Kingdom is out of scope.</p>
+  </div>
+</section>
+
+<h1><span class="num">01</span>How to read this design</h1>
+<div class="rule"></div>
+<p>This document is the technical design for running NAMAA as a national operating platform. It is the reference for platform, security, and product engineering. An API specification and a Crossplane composition catalog follow from it; they are not duplicated here.</p>
+<p>The word <strong>CKE</strong> in the deployment brief is the Kubernetes engine that runs the workloads. On Google Cloud that engine is <strong>Google Kubernetes Engine (GKE)</strong>. Every CKE cluster in this design is a private regional GKE cluster in Dammam. If CKE was meant as a different distribution, the landing zone, GitOps flow, and security planes still hold; the cluster claim in Crossplane is the piece that would change.</p>
+<div class="callout"><strong>Residency rule.</strong> Agronomic data, operator identities, session recordings, backups, and LGTM telemetry are stored only in me-central2. Organization policy restricts resource locations to that region. Egress that would ship logs or traces to a SaaS observability region is denied.</div>
+
+<h2>1.1 What the prototype already defines</h2>
+<p>The console is a bilingual operations product (English and Arabic branding) with two groups of screens.</p>
+<table>
+  <tr><th>Group</th><th>Screen</th><th>What it decides</th></tr>
+  <tr><td>Operations</td><td>Main dashboard</td><td>Solar output, water use, land-equivalent ratio, active units, microclimate, hourly generation / pump / battery</td></tr>
+  <tr><td>Operations</td><td>IoT &amp; AI</td><td>Sensor health across the Kingdom and recommendations for irrigation, shading, and energy</td></tr>
+  <tr><td>Operations</td><td>Precision irrigation</td><td>Zone duty cycle, water saved, next run</td></tr>
+  <tr><td>Operations</td><td>Vertical farming / CEA</td><td>EC, pH, temperature, humidity, yield per module</td></tr>
+  <tr><td>Operations</td><td>Agrivoltaics &amp; energy</td><td>PV generation, pump load, battery charge, tracker tilt</td></tr>
+  <tr><td>Operations</td><td>Cost &amp; economic impact</td><td>CapEx and OpEx against plan</td></tr>
+  <tr><td>Operations</td><td>Analytics &amp; reports</td><td>CO₂, hectares reclaimed, water saved, organic yield, exportable pack</td></tr>
+  <tr><td>Targets</td><td>Land allocation</td><td>Unit status (prep, prepared, active), 20 ha and 1.2 MW per unit, map</td></tr>
+  <tr><td>Targets</td><td>Ratios &amp; benchmarks</td><td>Reclamation, LER, water conservation, soil-temperature reduction</td></tr>
+  <tr><td>Targets</td><td>Strategic goals</td><td>Fleet capacity, carbon, yield, cost versus plan</td></tr>
+</table>
+<p>The prototype ships those screens from a static module (<code>src/data/namaa.ts</code>) and builds CSV in the browser. Production keeps the same screens and replaces the static module with services, a real sensor fleet, and report files generated on the platform.</p>
+
+<h2>1.2 Programme numbers the platform is sized for</h2>
+<table>
+  <tr><th>Measure</th><th>Prototype snapshot</th><th>Full programme</th></tr>
+  <tr><td>Farm units</td><td>214 active, 96 prepared, 190 in preparation, of 500</td><td>500</td></tr>
+  <tr><td>Land</td><td>4,280 ha reclaimed</td><td>10,000 ha (20 ha per unit)</td></tr>
+  <tr><td>PV</td><td>256.8 MW online</td><td>600 MW (1.2 MW per unit)</td></tr>
+  <tr><td>Regional hubs in the prototype</td><td>Riyadh, Jeddah, Madinah, Dammam, Tabuk, Najran, Qassim, Asir, AlUla, Jazan, Hail, Al Jawf</td><td>Same hubs, units attached to a hub</td></tr>
+  <tr><td>Sensor classes</td><td>Soil moisture, irradiance, temp/RH, wind, flow meter, nutrient EC</td><td>Same classes, plus actuator feedback</td></tr>
+  <tr><td>Design ingest rate</td><td>150 plotted sensors</td><td>About 10,000 sensors at one sample per 30 seconds (~350 messages/s, bursts to 2,000)</td></tr>
+  <tr><td>Water target</td><td>37.4% saved versus conventional</td><td>35–40% with sub-surface drip</td></tr>
+  <tr><td>LER target</td><td>1.62 (62% lift)</td><td>At least 60% lift versus mono-use land</td></tr>
+  <tr><td>Microclimate target</td><td>−2.5°C soil under the canopy</td><td>Hold that delta versus an open-desert control</td></tr>
+</table>
+
+<h1><span class="num">02</span>A farm unit</h1>
+<div class="rule"></div>
+<p>The unit is the thing the platform operates. Everything else — clusters, topics, dashboards — exists to sense this unit, decide, and act on it. One unit is 20 hectares and a 1.2 MW agrivoltaic block. Crops sit under and between the trackers. A controlled-environment module grows high-value organics. Sub-surface drip is powered by the block, with a battery so pumps ride through cloud.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Farm unit cross section">
+    <rect width="1000" height="430" fill="#f7faf8"/>
+    <rect x="0" y="0" width="1000" height="168" fill="#e5f2ea"/>
+    <circle cx="860" cy="52" r="26" fill="#e6b325"/>
+    <text x="820" y="28" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" fill="#8d6a22">Irradiance</text>
+    <!-- panels -->
+    <g fill="#1c5c3d" stroke="#143628" stroke-width="1.2">
+      <polygon points="70,150 150,118 210,150 130,182"/>
+      <polygon points="230,150 310,118 370,150 290,182"/>
+      <polygon points="390,150 470,118 530,150 450,182"/>
+    </g>
+    <g stroke="#5c6d65" stroke-width="3">
+      <line x1="140" y1="168" x2="140" y2="248"/>
+      <line x1="300" y1="168" x2="300" y2="248"/>
+      <line x1="460" y1="168" x2="460" y2="248"/>
+    </g>
+    <text x="70" y="108" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" fill="#143628">Tracking PV · 1.2 MW · tilt is a command</text>
+    <!-- soil -->
+    <rect x="0" y="250" width="700" height="180" fill="#f3ead8"/>
+    <line x1="40" y1="292" x2="660" y2="292" stroke="#2a6f97" stroke-width="3"/>
+    <text x="40" y="284" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1d4e6e">Sub-surface drip</text>
+    <!-- crops -->
+    <g fill="#2f7d52">
+      <ellipse cx="100" cy="246" rx="16" ry="22"/>
+      <ellipse cx="180" cy="250" rx="14" ry="18"/>
+      <ellipse cx="250" cy="244" rx="18" ry="24"/>
+      <ellipse cx="340" cy="248" rx="15" ry="20"/>
+      <ellipse cx="410" cy="242" rx="17" ry="24"/>
+      <ellipse cx="500" cy="248" rx="14" ry="18"/>
+      <ellipse cx="580" cy="244" rx="16" ry="22"/>
+    </g>
+    <!-- sensors -->
+    <g font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1a2b24">
+      <circle cx="120" cy="320" r="6" fill="#1d4e6e"/>
+      <text x="132" y="324">Soil moisture</text>
+      <circle cx="280" cy="330" r="6" fill="#8d6a22"/>
+      <text x="292" y="334">Temp / RH</text>
+      <circle cx="450" cy="318" r="6" fill="#1c5c3d"/>
+      <text x="462" y="322">EC</text>
+      <circle cx="200" cy="200" r="6" fill="#e6b325" stroke="#8d6a22"/>
+      <text x="212" y="198">Irradiance · wind</text>
+    </g>
+    <!-- right stack -->
+    <rect x="730" y="150" width="240" height="58" rx="8" fill="#fff" stroke="#1c5c3d" stroke-width="1.5"/>
+    <text x="746" y="174" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#143628">CEA module</text>
+    <text x="746" y="192" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Basil, lettuce, strawberry, microgreens</text>
+    <rect x="730" y="220" width="240" height="50" rx="8" fill="#fff" stroke="#8d6a22" stroke-width="1.5"/>
+    <text x="746" y="242" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#143628">Battery bank</text>
+    <text x="746" y="258" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Carries pumps across cloud</text>
+    <rect x="730" y="282" width="240" height="64" rx="8" fill="#143628"/>
+    <text x="746" y="306" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#fff">Unit gateway</text>
+    <text x="746" y="324" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">MQTT/TLS · store and forward</text>
+    <text x="746" y="340" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">Last schedule runs if the link drops</text>
+    <path d="M670 300 H730" stroke="#1c5c3d" stroke-width="1.5" fill="none"/>
+    <text x="24" y="408" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#5c6d65">One unit · 20 ha · dates, forage, vegetables, or a pilot · status: prep → prepared → active</text>
+  </svg>
+  <figcaption>Figure 1. One NAMAA farm unit. Sensors and actuators terminate on the unit gateway. The gateway is the only field component that talks to the platform.</figcaption>
+</figure>
+
+<p>The gateway keeps the last approved irrigation schedule, tracker plan, and battery policy, and it keeps executing them when the wide-area link is down. Desert links fail. A cloud round-trip is not allowed to be required for a pump that is already inside an approved envelope. New setpoints wait for the link. Acknowledgements and fresh samples catch up when it returns.</p>
+<p>Crop groups in the prototype — dates, forage, vegetables, pilots — become irrigation zones. CEA modules are a separate controlled volume on the same unit power and network, with their own EC, pH, temperature, and humidity.</p>
+
+<h1><span class="num">03</span>System context</h1>
+<div class="rule"></div>
+<p>People use the console. Gateways speak MQTT. Forecasts come from the National Center for Meteorology through an adapter. Privileged engineers do not get standing cluster credentials; they come in through Teleport. Detection and intelligence sit beside the product, not in the irrigation path.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="System context">
+    <defs>
+      <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+    <rect width="1000" height="560" fill="#f7faf8"/>
+    <rect x="300" y="175" width="400" height="200" rx="14" fill="#143628"/>
+    <text x="500" y="230" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#fff">NAMAA platform</text>
+    <text x="500" y="256" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" fill="#d7ebe0">Console · control services · CKE workloads</text>
+    <text x="500" y="276" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" fill="#d7ebe0">Dammam · me-central2</text>
+    <text x="500" y="304" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#e6c56b">Data and LGTM stay in the Kingdom</text>
+    <text x="500" y="340" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">Crossplane desired state · Argo CD delivery</text>
+
+    <g font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700">
+      <rect x="30" y="30" width="200" height="64" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="130" y="56" text-anchor="middle" fill="#143628">Agronomist</text>
+      <text x="130" y="74" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Approves setpoints</text>
+      <rect x="400" y="24" width="200" height="64" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="500" y="50" text-anchor="middle" fill="#143628">Operator</text>
+      <text x="500" y="68" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Site and alarms</text>
+      <rect x="760" y="30" width="210" height="64" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="865" y="56" text-anchor="middle" fill="#143628">Executive / regulator</text>
+      <text x="865" y="74" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Goals and report packs</text>
+      <rect x="20" y="250" width="220" height="72" rx="8" fill="#e7f1f7" stroke="#1d4e6e"/>
+      <text x="130" y="278" text-anchor="middle" fill="#1d4e6e">Unit gateways</text>
+      <text x="130" y="298" text-anchor="middle" font-size="11" font-weight="500" fill="#1d4e6e">500 units · MQTT/TLS</text>
+      <rect x="760" y="230" width="220" height="78" rx="8" fill="#f8f1de" stroke="#8d6a22"/>
+      <text x="870" y="258" text-anchor="middle" fill="#8d6a22">NCM forecast</text>
+      <text x="870" y="278" text-anchor="middle" font-size="11" font-weight="500" fill="#8d6a22">Adapter only</text>
+      <text x="870" y="294" text-anchor="middle" font-size="11" font-weight="500" fill="#8d6a22">Stored in-region</text>
+      <rect x="40" y="450" width="200" height="78" rx="8" fill="#f8eeec" stroke="#8a3b34"/>
+      <text x="140" y="478" text-anchor="middle" fill="#8a3b34">Cyfirma</text>
+      <text x="140" y="498" text-anchor="middle" font-size="11" font-weight="500" fill="#8a3b34">Threat intelligence</text>
+      <rect x="290" y="450" width="200" height="78" rx="8" fill="#f8eeec" stroke="#8a3b34"/>
+      <text x="390" y="478" text-anchor="middle" fill="#8a3b34">MDR</text>
+      <text x="390" y="498" text-anchor="middle" font-size="11" font-weight="500" fill="#8a3b34">Vendor to be selected</text>
+      <rect x="540" y="450" width="200" height="78" rx="8" fill="#e7f2eb" stroke="#1c5c3d"/>
+      <text x="640" y="478" text-anchor="middle" fill="#143628">Teleport</text>
+      <text x="640" y="498" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">PAM for humans</text>
+      <rect x="780" y="450" width="190" height="78" rx="8" fill="#e7f2eb" stroke="#1c5c3d"/>
+      <text x="875" y="478" text-anchor="middle" fill="#143628">LGTM</text>
+      <text x="875" y="498" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Hosted in KSA</text>
+    </g>
+    <path d="M230 62 H400" stroke="#1c5c3d" stroke-width="1.4" marker-end="url(#a1)"/>
+    <path d="M500 88 V175" stroke="#1c5c3d" stroke-width="1.4" marker-end="url(#a1)"/>
+    <path d="M760 62 H700" stroke="#1c5c3d" stroke-width="1.4" marker-end="url(#a1)"/>
+    <path d="M240 286 H300" stroke="#1d4e6e" stroke-width="1.4" marker-end="url(#a1)"/>
+    <path d="M760 270 H700" stroke="#8d6a22" stroke-width="1.4" marker-end="url(#a1)"/>
+    <path d="M140 450 V400 H400 V375" stroke="#8a3b34" stroke-width="1.2" fill="none"/>
+    <path d="M390 450 V390" stroke="#8a3b34" stroke-width="1.2" fill="none"/>
+    <path d="M640 450 V375" stroke="#1c5c3d" stroke-width="1.2" fill="none"/>
+    <path d="M875 450 V400 H620 V375" stroke="#1c5c3d" stroke-width="1.2" fill="none"/>
+  </svg>
+  <figcaption>Figure 2. System context. The product path is people, gateways, and the forecast. Teleport, LGTM, Cyfirma, and the MDR service are operating planes around it. The MDR vendor is not chosen yet.</figcaption>
+</figure>
+
+<h2>3.1 Actors</h2>
+<table>
+  <tr><th>Actor</th><th>Plane</th><th>Allowed to</th></tr>
+  <tr><td>Agronomist</td><td>Console OIDC</td><td>Approve recommendations outside the auto envelope, edit schedules inside policy, inspect a unit</td></tr>
+  <tr><td>Operator</td><td>Console OIDC</td><td>Watch a hub, acknowledge alarms, see command state. Cannot change the envelope</td></tr>
+  <tr><td>Analyst</td><td>Console OIDC</td><td>Economics, benchmarks, report packs. Read only</td></tr>
+  <tr><td>Executive</td><td>Console OIDC</td><td>Goals, fleet totals, exported packs</td></tr>
+  <tr><td>Administrator</td><td>Console OIDC</td><td>Users and approval envelopes. No cluster access</td></tr>
+  <tr><td>Platform engineer, SRE</td><td>Teleport</td><td>Kubernetes, Cloud SQL, Argo CD, Grafana, break-glass. Session recorded</td></tr>
+  <tr><td>Auditor</td><td>Console read + Teleport auditor role</td><td>Exports and session recordings. Cannot actuate</td></tr>
+  <tr><td>Unit gateway</td><td>Device certificate</td><td>Publish samples, receive commands for its own unit</td></tr>
+</table>
+<p>Application identity and infrastructure identity are the same IdP and two different authorization systems. A console role never implies a kubeconfig. A Teleport role never implies the right to approve an irrigation setpoint.</p>
+
+<h1><span class="num">04</span>Logical architecture</h1>
+<div class="rule"></div>
+<p>The console is a static web application, the same React application as the prototype, talking only to a backend-for-frontend. Domain services own their tables. They exchange facts on Pub/Sub. The gateway never calls the domain services directly.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logical containers">
+    <rect width="1000" height="620" fill="#f7faf8"/>
+    <rect x="16" y="16" width="968" height="588" rx="12" fill="none" stroke="#c5d5cc" stroke-width="1.5"/>
+    <text x="32" y="40" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#5c6d65">CKE WORKLOAD CLUSTER · PROD · me-central2</text>
+
+    <rect x="36" y="58" width="200" height="70" rx="8" fill="#143628"/>
+    <text x="136" y="86" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Web console</text>
+    <text x="136" y="106" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">React · Arabic / English</text>
+
+    <rect x="260" y="58" width="220" height="70" rx="8" fill="#1c5c3d"/>
+    <text x="370" y="86" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">BFF</text>
+    <text x="370" y="106" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">OIDC session · read models</text>
+
+    <rect x="510" y="58" width="220" height="70" rx="8" fill="#1d4e6e"/>
+    <text x="620" y="86" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">MQTT broker</text>
+    <text x="620" y="106" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#e7f1f7">EMQX · 3 zones</text>
+
+    <rect x="756" y="58" width="208" height="70" rx="8" fill="#1d4e6e"/>
+    <text x="860" y="86" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Ingest</text>
+    <text x="860" y="106" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#e7f1f7">Validate · dedupe · archive</text>
+
+    <g font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#143628">
+      <rect x="36" y="170" width="176" height="78" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="124" y="200" text-anchor="middle">Land</text>
+      <text x="124" y="220" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Units, hubs, status</text>
+      <rect x="228" y="170" width="176" height="78" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="316" y="200" text-anchor="middle">Irrigation</text>
+      <text x="316" y="220" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Zones, schedules</text>
+      <rect x="420" y="170" width="176" height="78" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="508" y="200" text-anchor="middle">CEA</text>
+      <text x="508" y="220" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">Climate, yield</text>
+      <rect x="612" y="170" width="176" height="78" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="700" y="200" text-anchor="middle">Energy</text>
+      <text x="700" y="220" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">PV, pump, battery</text>
+      <rect x="804" y="170" width="160" height="78" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="884" y="200" text-anchor="middle">Economics</text>
+      <text x="884" y="220" text-anchor="middle" font-size="11" font-weight="500" fill="#5c6d65">CapEx, OpEx</text>
+    </g>
+
+    <rect x="36" y="276" width="300" height="86" rx="8" fill="#f8f1de" stroke="#8d6a22"/>
+    <text x="186" y="308" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#143628">Recommender</text>
+    <text x="186" y="328" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Irrigation · shading · energy</text>
+    <text x="186" y="346" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Envelope check, then approval</text>
+
+    <rect x="356" y="276" width="280" height="86" rx="8" fill="#143628"/>
+    <text x="496" y="308" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">Command</text>
+    <text x="496" y="328" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">Desired setpoint → MQTT</text>
+    <text x="496" y="346" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#d7ebe0">Ack and verify</text>
+
+    <rect x="656" y="276" width="308" height="86" rx="8" fill="#fff" stroke="#1c5c3d"/>
+    <text x="810" y="308" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#143628">Reporting &amp; goals</text>
+    <text x="810" y="328" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">Benchmarks, strategic goals</text>
+    <text x="810" y="346" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#5c6d65">PDF / CSV packs in GCS</text>
+
+    <rect x="36" y="400" width="440" height="70" rx="8" fill="#e7f1f7" stroke="#1d4e6e"/>
+    <text x="256" y="428" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4e6e">Cloud SQL PostgreSQL · Timescale</text>
+    <text x="256" y="448" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1d4e6e">Units, commands, series · private IP · CMEK</text>
+
+    <rect x="496" y="400" width="220" height="70" rx="8" fill="#e7f1f7" stroke="#1d4e6e"/>
+    <text x="606" y="428" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4e6e">Memorystore</text>
+    <text x="606" y="448" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1d4e6e">Locks, hot state</text>
+
+    <rect x="736" y="400" width="228" height="70" rx="8" fill="#e7f1f7" stroke="#1d4e6e"/>
+    <text x="850" y="428" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4e6e">Pub/Sub + GCS</text>
+    <text x="850" y="448" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="11" fill="#1d4e6e">Events and raw archive</text>
+
+    <rect x="36" y="494" width="928" height="86" rx="8" fill="#f8f1de" stroke="#8d6a22"/>
+    <text x="500" y="526" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#143628">On every node, not in this data path: OpenTelemetry → LGTM cluster in Dammam</text>
+    <text x="500" y="548" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#5c6d65">Map tiles are served from the cluster. The browser does not call a public tile host.</text>
+    <text x="500" y="566" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#5c6d65">Secrets arrive from Secret Manager through External Secrets. Nothing secret is in Git.</text>
+  </svg>
+  <figcaption>Figure 3. Containers on the production CKE cluster. Domain services are separate deployables that share one PostgreSQL instance and one event bus.</figcaption>
+</figure>
+
+<h2>4.1 Screen to service</h2>
+<table>
+  <tr><th>Console screen</th><th>Reads</th><th>Writes</th></tr>
+  <tr><td>Main dashboard</td><td>BFF aggregates of energy, water, LER, unit counts, microclimate</td><td>None</td></tr>
+  <tr><td>IoT &amp; AI</td><td>Sensor last-seen, recommendation queue</td><td>Approve or reject a recommendation</td></tr>
+  <tr><td>Precision irrigation</td><td>Zone state, next run, water saved</td><td>Schedule edits inside the envelope</td></tr>
+  <tr><td>CEA</td><td>Module climate and yield</td><td>Setpoint edits inside the envelope</td></tr>
+  <tr><td>Energy</td><td>Hourly generation, pump, battery, tilt</td><td>Approve tilt and charge recommendations</td></tr>
+  <tr><td>Economics</td><td>Plan versus actual CapEx and OpEx</td><td>Analyst corrections, audited</td></tr>
+  <tr><td>Reports</td><td>Impact snapshot</td><td>Generate a pack (CSV and PDF) into GCS</td></tr>
+  <tr><td>Land</td><td>Units and status</td><td>Administrator status transitions</td></tr>
+  <tr><td>Benchmarks and goals</td><td>Current versus target</td><td>None on the executive path</td></tr>
+</table>
+
+<h2>4.2 Interfaces</h2>
+<table>
+  <tr><th>Interface</th><th>Use</th></tr>
+  <tr><td><code>GET/POST /v1/...</code> on the BFF</td><td>Console. Resources: units, sensors, telemetry summaries, recommendations, irrigation zones, CEA modules, energy series, economics, benchmarks, goals, reports</td></tr>
+  <tr><td><code>POST /v1/recommendations/{id}:approve</code> and <code>:reject</code></td><td>The only human actuation entry point</td></tr>
+  <tr><td>MQTT <code>namaa/{unitId}/telemetry/{class}</code></td><td>Gateway uplink. QoS 1</td></tr>
+  <tr><td>MQTT <code>namaa/{unitId}/commands/{actuator}</code></td><td>Downlink. Actuator is drip, tracker, or battery</td></tr>
+  <tr><td>Pub/Sub <code>telemetry.accepted</code>, <code>recommendation.raised</code>, <code>command.dispatched</code>, <code>command.verified</code></td><td>Between ingest, recommender, command, and reporting</td></tr>
+  <tr><td>NCM adapter</td><td>Pulls forecasts into <code>forecast</code> rows. No other service calls NCM</td></tr>
+</table>
+<p>A full API specification is the next document. The shapes above are enough to build the console against, and they match the fields the prototype already shows.</p>
+
+<h1><span class="num">05</span>Control loop</h1>
+<div class="rule"></div>
+<p>Recommendations in the prototype are three kinds: shift drip into the night, change tracker tilt, and pre-charge a battery ahead of cloud. Production keeps those kinds. A recommendation is a record with a type, a confidence, an impact line, and a state. It is not an immediate write to a valve.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Control loop">
+    <defs>
+      <marker id="a5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+    <rect width="1000" height="300" fill="#f7faf8"/>
+    <g font-family="Avenir Next, Helvetica, sans-serif" text-anchor="middle">
+      <rect x="20" y="90" width="140" height="70" rx="8" fill="#e7f1f7" stroke="#1d4e6e"/>
+      <text x="90" y="120" font-size="13" font-weight="700" fill="#1d4e6e">Sense</text>
+      <text x="90" y="140" font-size="11" fill="#1d4e6e">Gateway sample</text>
+      <rect x="190" y="90" width="140" height="70" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="260" y="120" font-size="13" font-weight="700" fill="#143628">Ingest</text>
+      <text x="260" y="140" font-size="11" fill="#5c6d65">Store the series</text>
+      <rect x="360" y="90" width="150" height="70" rx="8" fill="#f8f1de" stroke="#8d6a22"/>
+      <text x="435" y="120" font-size="13" font-weight="700" fill="#143628">Recommend</text>
+      <text x="435" y="140" font-size="11" fill="#5c6d65">15 min + events</text>
+      <rect x="540" y="40" width="150" height="64" rx="8" fill="#fff" stroke="#8d6a22"/>
+      <text x="615" y="66" font-size="13" font-weight="700" fill="#143628">Inside envelope</text>
+      <text x="615" y="84" font-size="11" fill="#5c6d65">Auto-apply</text>
+      <rect x="540" y="150" width="150" height="64" rx="8" fill="#fff" stroke="#8a3b34"/>
+      <text x="615" y="176" font-size="13" font-weight="700" fill="#8a3b34">Outside</text>
+      <text x="615" y="194" font-size="11" fill="#8a3b34">Agronomist</text>
+      <rect x="720" y="90" width="130" height="70" rx="8" fill="#143628"/>
+      <text x="785" y="120" font-size="13" font-weight="700" fill="#fff">Command</text>
+      <text x="785" y="140" font-size="11" fill="#d7ebe0">MQTT downlink</text>
+      <rect x="870" y="90" width="110" height="70" rx="8" fill="#1c5c3d"/>
+      <text x="925" y="120" font-size="13" font-weight="700" fill="#fff">Verify</text>
+      <text x="925" y="140" font-size="11" fill="#d7ebe0">Flow, tilt, kWh</text>
+    </g>
+    <path d="M160 125 H190" stroke="#1c5c3d" marker-end="url(#a5)"/>
+    <path d="M330 125 H360" stroke="#1c5c3d" marker-end="url(#a5)"/>
+    <path d="M510 110 H540" stroke="#1c5c3d" marker-end="url(#a5)"/>
+    <path d="M510 145 H540" stroke="#8a3b34" marker-end="url(#a5)"/>
+    <path d="M690 72 H785 V90" stroke="#1c5c3d" fill="none" marker-end="url(#a5)"/>
+    <path d="M690 182 H785 V160" stroke="#1c5c3d" fill="none" marker-end="url(#a5)"/>
+    <path d="M850 125 H870" stroke="#1c5c3d" marker-end="url(#a5)"/>
+    <text x="500" y="270" text-anchor="middle" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#5c6d65">States: proposed → approved or rejected → dispatched → acknowledged → verified</text>
+  </svg>
+  <figcaption>Figure 4. Closed loop. Verification uses a later sample (flow meter, tracker angle, battery power), not the gateway ack alone.</figcaption>
+</figure>
+
+<h2>5.1 Envelope</h2>
+<p>Each zone has an envelope an administrator sets: maximum minutes of drip per night, earliest and latest start, maximum tilt change in degrees, maximum battery charge rate. A recommendation whose setpoint sits inside the envelope and whose confidence is at least 85 is applied and recorded. Anything outside is queued on the IoT &amp; AI screen. Rejected recommendations stay in the audit table. The prototype’s sample recommendations (night irrigation on units 12–18, +6° west tilt after 14:30, pre-charge before 11:20) are the acceptance tests for this loop.</p>
+<h2>5.2 Recommender v1</h2>
+<p>Version 1 is deterministic and inspectable, running on the CKE cluster. It does not call a model API outside the Kingdom.</p>
+<ul>
+  <li><strong>Irrigation.</strong> Soil-moisture slope plus the NCM temperature forecast. If moisture is falling and the day-peak forecast is above the crop threshold, propose a night shift of the pending drip volume.</li>
+  <li><strong>Shading.</strong> Inter-row irradiance above the crop stress threshold in the afternoon proposes a westward tilt change, rejected automatically if the estimated energy loss exceeds 2%.</li>
+  <li><strong>Energy.</strong> A forecast cloud band proposes pre-charge so the pump interval stays off the grid import.</li>
+</ul>
+<p>A later model can replace a rule behind the same recommendation record. Training data is the in-region archive. Serving stays on the CKE cluster so a regional gap in a hosted ML product does not block actuation.</p>
+
+<h1><span class="num">06</span>Domain data</h1>
+<div class="rule"></div>
+<p>Operational state lives in Cloud SQL for PostgreSQL with the Timescale extension, private IP, regional high availability, customer-managed encryption in Cloud KMS in me-central2. Point-in-time recovery is 7 days. Daily backups are kept 30 days in the same region.</p>
+<table>
+  <tr><th>Store</th><th>Holds</th><th>Retention</th></tr>
+  <tr><td>PostgreSQL tables</td><td>Hub, unit, zone, CEA module, envelope, recommendation, command, user role, cost line, benchmark, goal, report metadata</td><td>Life of the programme</td></tr>
+  <tr><td>Timescale hypertables</td><td>Sensor samples, energy intervals, microclimate</td><td>Hot for 13 months, then compressed</td></tr>
+  <tr><td>GCS raw archive</td><td>Original gateway payloads, generated report packs, recommender inputs for a decision</td><td>13 months for payloads, 7 years for issued report packs</td></tr>
+  <tr><td>Memorystore</td><td>Idempotency keys, per-unit command locks</td><td>Hours</td></tr>
+  <tr><td>Pub/Sub</td><td>The four domain events</td><td>7 days, in-region</td></tr>
+</table>
+<p>Unit status moves only forward: <strong>prep → prepared → active</strong>. Active is what counts toward the 214-of-500 style fleet total and toward megawatts online. A unit that is not active does not receive actuation commands.</p>
+<p>Personal data is the operator account: name, email, role, region scope. It stays in Cloud SQL. Gateway payloads are agronomic, not personal. Cyfirma receives no agronomic data and no operator profile. The MDR service, once a vendor is selected, receives security events; the user identifier on those events is the account id, not the name, unless an investigation ticket asks for more.</p>
+
+<h2>6.1 Sizing</h2>
+<p>Ten thousand sensors at one sample per 30 seconds is about 30 million samples a day. That is a small Timescale workload. The cluster is sized for headroom and for zone failure, not for a stream-processing platform. Ingest is horizontally scaled on CPU. The broker is a 3-pod EMQX cluster with a pod anti-affinity across zones.</p>
+
+<h1><span class="num">07</span>Google Cloud landing zone</h1>
+<div class="rule"></div>
+<p>The platform runs in Google Cloud region <strong>me-central2 (Dammam)</strong>, three zones. Google Cloud documents this region as inside the Kingdom, reached for KSA billing through the reseller CNTXT, and assessed by the National Cybersecurity Authority against the Essential Cybersecurity Controls and the Cloud Cybersecurity Controls. This design uses that region so residency is a location constraint, not a promise in a diagram.</p>
+<p>Resource-location organization policy allows only <code>me-central2</code>. Crossplane compositions refuse a claim that asks for any other region on a data-bearing resource. Backups and replicas follow the same constraint. There is no multi-region bucket.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Landing zone">
+    <rect width="1000" height="520" fill="#f7faf8"/>
+    <rect x="16" y="16" width="968" height="488" rx="12" fill="#143628"/>
+    <text x="36" y="46" font-family="Avenir Next, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#e6c56b">GCP organization · KSA billing via CNTXT · locations locked to me-central2</text>
+    <text x="36" y="68" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">Shared VPC host: namaa-host. Private Service Connect and Private Google Access. No public database IPs.</text>
+    <g font-family="Avenir Next, Helvetica, sans-serif">
+      <rect x="36" y="92" width="300" height="120" rx="8" fill="#1c5c3d"/>
+      <text x="52" y="118" font-size="14" font-weight="700" fill="#fff">namaa-mgmt</text>
+      <text x="52" y="140" font-size="12" fill="#d7ebe0">CKE cluster: management</text>
+      <text x="52" y="158" font-size="12" fill="#d7ebe0">Argo CD · Crossplane</text>
+      <text x="52" y="176" font-size="12" fill="#d7ebe0">Teleport cluster</text>
+      <text x="52" y="194" font-size="12" fill="#e6c56b">Only place that can create cloud resources</text>
+
+      <rect x="350" y="92" width="300" height="120" rx="8" fill="#245c40"/>
+      <text x="366" y="118" font-size="14" font-weight="700" fill="#fff">namaa-nonprod</text>
+      <text x="366" y="140" font-size="12" fill="#d7ebe0">CKE cluster: dev + staging</text>
+      <text x="366" y="158" font-size="12" fill="#d7ebe0">Own Cloud SQL, own broker</text>
+      <text x="366" y="176" font-size="12" fill="#d7ebe0">Synthetic gateways</text>
+      <text x="366" y="194" font-size="12" fill="#d7ebe0">No production samples</text>
+
+      <rect x="664" y="92" width="296" height="120" rx="8" fill="#e6c56b"/>
+      <text x="680" y="118" font-size="14" font-weight="700" fill="#143628">namaa-prod</text>
+      <text x="680" y="140" font-size="12" fill="#143628">CKE cluster: production</text>
+      <text x="680" y="158" font-size="12" fill="#143628">Cloud SQL HA · Redis</text>
+      <text x="680" y="176" font-size="12" fill="#143628">Pub/Sub · GCS archive</text>
+      <text x="680" y="194" font-size="12" fill="#143628">Artifact Registry</text>
+
+      <rect x="36" y="232" width="450" height="120" rx="8" fill="#1d4e6e"/>
+      <text x="52" y="258" font-size="14" font-weight="700" fill="#fff">namaa-obs</text>
+      <text x="52" y="280" font-size="12" fill="#e7f1f7">CKE cluster dedicated to LGTM</text>
+      <text x="52" y="298" font-size="12" fill="#e7f1f7">Grafana · Loki · Tempo · Mimir</text>
+      <text x="52" y="316" font-size="12" fill="#e7f1f7">Blocks on GCS in me-central2</text>
+      <text x="52" y="334" font-size="12" fill="#e6c56b">No remote-write outside the Kingdom</text>
+
+      <rect x="506" y="232" width="454" height="120" rx="8" fill="#8a3b34"/>
+      <text x="522" y="258" font-size="14" font-weight="700" fill="#fff">namaa-sec</text>
+      <text x="522" y="280" font-size="12" fill="#f8eeec">Cloud KMS / HSM · Secret Manager</text>
+      <text x="522" y="298" font-size="12" fill="#f8eeec">Cyfirma connector</text>
+      <text x="522" y="316" font-size="12" fill="#f8eeec">MDR export of security events</text>
+      <text x="522" y="334" font-size="12" fill="#f8eeec">Cloud Armor policy data</text>
+
+      <rect x="36" y="372" width="924" height="110" rx="8" fill="#0f241c"/>
+      <text x="52" y="400" font-size="14" font-weight="700" fill="#fff">namaa-host · Shared VPC</text>
+      <text x="52" y="424" font-size="12" fill="#d7ebe0">Subnets per environment. Firewall default deny. Ingress only from Cloud Armor to the console.</text>
+      <text x="52" y="444" font-size="12" fill="#d7ebe0">Management may reach prod and nonprod API servers. Workload clusters cannot reach each other.</text>
+      <text x="52" y="464" font-size="12" fill="#d7ebe0">Observability receives telemetry. It cannot read Cloud SQL.</text>
+    </g>
+  </svg>
+  <figcaption>Figure 5. Landing zone. Five service projects on one Shared VPC. Crossplane runs only in namaa-mgmt.</figcaption>
+</figure>
+
+<h2>7.1 Network</h2>
+<ul>
+  <li>Private GKE control planes. kubectl and database sessions enter through the Teleport agents, which already sit on the VPC.</li>
+  <li>Nodes have no public IPs. Egress is Cloud NAT, with an allow-list: NCM adapter destinations, Cyfirma API, the chosen MDR ingestion endpoint, OS package mirrors, and nothing else of consequence. Grafana Cloud and other telemetry SaaS endpoints are explicitly denied.</li>
+  <li>Cloud SQL and Memorystore have private IP only.</li>
+  <li>Public entry is one HTTPS load balancer in front of the console and the BFF, with Cloud Armor. The MQTT listener is a separate TCP load balancer, mutual TLS, device certificates issued per gateway. It is not on the public web path.</li>
+  <li>Map tiles are served from the console origin. Leaflet does not point at a public OpenStreetMap host, because that would export viewport locations.</li>
+</ul>
+
+<h2>7.2 Encryption and keys</h2>
+<p>Cloud KMS in namaa-sec, with Cloud HSM keys for Cloud SQL, GCS, and the disk encryption of the CKE node pools. Applications do not handle key material. Workload Identity binds each Kubernetes service account to a Google service account that can do one job: ingest can subscribe and write objects, reporting can write report objects, External Secrets can read a named set of secrets, Crossplane’s provider identity lives only on the management cluster.</p>
+
+<h1><span class="num">08</span>CKE workload clusters</h1>
+<div class="rule"></div>
+<p>Each CKE cluster is a <strong>regional GKE Standard</strong> cluster across me-central2-a, b, and c. Standard, rather than Autopilot, because the broker, the Timescale-adjacent pools, the Teleport agent, and a later inference pool need node-pool control. Release channel is regular. Workload Identity is on. Binary Authorization is on: only images signed by the CI key in Artifact Registry may run in production.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cluster layout">
+    <rect width="1000" height="460" fill="#f7faf8"/>
+    <g font-family="Avenir Next, Helvetica, sans-serif">
+      <rect x="20" y="20" width="310" height="200" rx="10" fill="#fff" stroke="#1c5c3d"/>
+      <text x="36" y="46" font-size="13" font-weight="700" fill="#143628">Node pool · system</text>
+      <text x="36" y="70" font-size="12" fill="#5c6d65">1 node per zone, tainted</text>
+      <text x="36" y="92" font-size="12" fill="#1a2b24">kube-system, cert-manager</text>
+      <text x="36" y="112" font-size="12" fill="#1a2b24">External Secrets</text>
+      <text x="36" y="132" font-size="12" fill="#1a2b24">OTel collector DaemonSet</text>
+      <text x="36" y="152" font-size="12" fill="#1a2b24">Teleport kube agent</text>
+      <text x="36" y="172" font-size="12" fill="#1a2b24">Network policy controller</text>
+      <text x="36" y="198" font-size="12" fill="#8d6a22">No application pods</text>
+
+      <rect x="345" y="20" width="320" height="200" rx="10" fill="#fff" stroke="#1c5c3d"/>
+      <text x="361" y="46" font-size="13" font-weight="700" fill="#143628">Node pool · apps</text>
+      <text x="361" y="70" font-size="12" fill="#5c6d65">min 1 per zone, max 4 per zone</text>
+      <text x="361" y="96" font-size="12" fill="#1a2b24">console, bff, land, irrigation</text>
+      <text x="361" y="116" font-size="12" fill="#1a2b24">cea, energy, economics</text>
+      <text x="361" y="136" font-size="12" fill="#1a2b24">recommender, command, reporting</text>
+      <text x="361" y="156" font-size="12" fill="#1a2b24">tile server</text>
+      <text x="361" y="184" font-size="12" fill="#5c6d65">Pod disruption budgets of 1</text>
+      <text x="361" y="204" font-size="12" fill="#5c6d65">Requests set, limits set</text>
+
+      <rect x="680" y="20" width="300" height="200" rx="10" fill="#fff" stroke="#1d4e6e"/>
+      <text x="696" y="46" font-size="13" font-weight="700" fill="#1d4e6e">Node pool · edge</text>
+      <text x="696" y="70" font-size="12" fill="#5c6d65">3 nodes, one per zone</text>
+      <text x="696" y="96" font-size="12" fill="#1a2b24">EMQX</text>
+      <text x="696" y="116" font-size="12" fill="#1a2b24">Ingest workers</text>
+      <text x="696" y="136" font-size="12" fill="#1a2b24">Device-cert admission</text>
+      <text x="696" y="168" font-size="12" fill="#5c6d65">Isolated network policy:</text>
+      <text x="696" y="188" font-size="12" fill="#5c6d65">MQTT in, Pub/Sub out</text>
+
+      <rect x="20" y="240" width="470" height="190" rx="10" fill="#143628"/>
+      <text x="36" y="268" font-size="13" font-weight="700" fill="#fff">Namespaces on the workload cluster</text>
+      <text x="36" y="296" font-size="12" fill="#d7ebe0">namaa-console · namaa-core · namaa-control</text>
+      <text x="36" y="316" font-size="12" fill="#d7ebe0">namaa-edge · namaa-reporting · namaa-tiles</text>
+      <text x="36" y="344" font-size="12" fill="#e6c56b">Default-deny NetworkPolicy in each</text>
+      <text x="36" y="364" font-size="12" fill="#d7ebe0">Restricted Pod Security admission</text>
+      <text x="36" y="384" font-size="12" fill="#d7ebe0">Run as non-root, read-only root filesystem</text>
+      <text x="36" y="404" font-size="12" fill="#d7ebe0">No Crossplane, no Argo CD, no cloud-admin tokens</text>
+
+      <rect x="510" y="240" width="470" height="190" rx="10" fill="#f8f1de" stroke="#8d6a22"/>
+      <text x="526" y="268" font-size="13" font-weight="700" fill="#143628">Management cluster only</text>
+      <text x="526" y="296" font-size="12" fill="#1a2b24">namespace crossplane — providers and compositions</text>
+      <text x="526" y="316" font-size="12" fill="#1a2b24">namespace argocd — app-of-apps</text>
+      <text x="526" y="336" font-size="12" fill="#1a2b24">namespace teleport — auth, proxy, session store</text>
+      <text x="526" y="364" font-size="12" fill="#5c6d65">Small system and apps pools.</text>
+      <text x="526" y="384" font-size="12" fill="#5c6d65">This cluster does not run the console</text>
+      <text x="526" y="404" font-size="12" fill="#5c6d65">and does not store agronomic samples.</text>
+    </g>
+  </svg>
+  <figcaption>Figure 6. CKE layout. Production and non-production workload clusters share this shape. The management cluster is a different, smaller cluster.</figcaption>
+</figure>
+
+<h2>8.1 Service levels the cluster is built for</h2>
+<table>
+  <tr><th>Objective</th><th>Target</th><th>Notes</th></tr>
+  <tr><td>Console availability</td><td>99.9% in a month</td><td>Multi-zone. Excludes the field link</td></tr>
+  <tr><td>Ingest lag</td><td>p95 under 10 seconds to queryable</td><td>Broker receive to Timescale commit</td></tr>
+  <tr><td>Command dispatch</td><td>p95 under 2 seconds</td><td>Approval to MQTT publish, when the gateway is online</td></tr>
+  <tr><td>Recommendation cycle</td><td>Every 15 minutes, finishes under 2 minutes for 500 units</td><td>Plus an immediate cycle on a threshold breach</td></tr>
+  <tr><td>Zone loss</td><td>No operator action</td><td>Pods and Cloud SQL failover inside the region</td></tr>
+  <tr><td>Cluster rebuild</td><td>4 hours</td><td>Git reconcile plus Cloud SQL restore</td></tr>
+  <tr><td>Region loss</td><td>Not a designed failover</td><td>A second region would leave the Kingdom</td></tr>
+</table>
+<p>Edge behaviour during a platform outage: gateways continue the last acknowledged schedule. They buffer samples on disk (at least 72 hours) and replay them. They do not invent new setpoints.</p>
+
+<h1><span class="num">09</span>Crossplane</h1>
+<div class="rule"></div>
+<p>Infrastructure is claims in Git. Crossplane on the management cluster is the only identity that can create Google Cloud resources for NAMAA. People do not click projects into existence, and CI does not hold a project-owner key.</p>
+<p>Providers: <code>provider-gcp</code> (family: compute, container, sql, storage, pubsub, dns, kms, secretmanager), <code>provider-kubernetes</code> for namespaced add-ons that must exist before Argo CD’s app waves, and the Helm provider only where a vendor chart is the upstream install (EMQX operator, Teleport). Application manifests are not Helm-from-Crossplane; Argo CD owns those.</p>
+
+<h2>9.1 Composite resources</h2>
+<table>
+  <tr><th>Claim</th><th>Creates</th><th>Guard</th></tr>
+  <tr><td>XNetwork</td><td>Subnets, Cloud NAT, firewall, Private Service Connect</td><td>Region me-central2</td></tr>
+  <tr><td>XCkeCluster</td><td>Private regional GKE, node pools, Workload Identity, release channel</td><td>Private endpoint, Binary Authorization required in prod</td></tr>
+  <tr><td>XSql</td><td>Cloud SQL PostgreSQL, HA, PITR, private IP, CMEK</td><td>Backups in me-central2, no public IP</td></tr>
+  <tr><td>XRedis</td><td>Memorystore</td><td>Private, in-region</td></tr>
+  <tr><td>XBucket</td><td>GCS, uniform access, CMEK</td><td>Location me-central2, public access prevention</td></tr>
+  <tr><td>XTopic</td><td>Pub/Sub topic and the domain subscriptions</td><td>In-region message storage</td></tr>
+  <tr><td>XRegistry</td><td>Artifact Registry Docker repository</td><td>me-central2</td></tr>
+  <tr><td>XKeys</td><td>KMS key ring and keys</td><td>HSM protection level for data keys</td></tr>
+  <tr><td>XIdentity</td><td>Google service account and Workload Identity binding</td><td>One account per Kubernetes service</td></tr>
+</table>
+
+<pre>apiVersion: namaa.platform/v1alpha1
+kind: CkeCluster
+metadata:
+  name: namaa-prod
+spec:
+  compositionRef:
+    name: cke-gke-regional
+  parameters:
+    project: namaa-prod
+    region: me-central2
+    releaseChannel: REGULAR
+    privateEndpoint: true
+    binaryAuthorization: true
+    pools:
+      - name: system
+        machine: e2-standard-4
+        perZone: 1
+      - name: apps
+        machine: e2-standard-4
+        minPerZone: 1
+        maxPerZone: 4
+      - name: edge
+        machine: e2-standard-4
+        perZone: 1</pre>
+<p>The composition defaults <code>region</code> to me-central2 and rejects any other value. Deleting a prod claim is a Git change with two reviewers, and the composition sets <code>deletionPolicy: Orphan</code> on Cloud SQL and GCS so a bad merge cannot drop the archive. Orphaned resources are reattached, not recreated.</p>
+
+<h1><span class="num">10</span>Argo CD</h1>
+<div class="rule"></div>
+<p>Git is the desired state of both cloud resources and workloads. Argo CD runs on the management cluster and is the only deployer into the CKE workload clusters. Sync to production is manual. Sync to dev is automated on the dev branch.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Delivery flow">
+    <defs>
+      <marker id="a10" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+    <rect width="1000" height="420" fill="#f7faf8"/>
+    <g font-family="Avenir Next, Helvetica, sans-serif" text-anchor="middle">
+      <rect x="30" y="40" width="160" height="64" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="110" y="66" font-size="13" font-weight="700" fill="#143628">1 · Pull request</text>
+      <text x="110" y="86" font-size="11" fill="#5c6d65">app or claim</text>
+      <rect x="220" y="40" width="170" height="64" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="305" y="66" font-size="13" font-weight="700" fill="#143628">2 · CI</text>
+      <text x="305" y="86" font-size="11" fill="#5c6d65">test, build, sign</text>
+      <rect x="420" y="40" width="180" height="64" rx="8" fill="#e7f1f7" stroke="#1d4e6e"/>
+      <text x="510" y="66" font-size="13" font-weight="700" fill="#1d4e6e">3 · Registry</text>
+      <text x="510" y="86" font-size="11" fill="#1d4e6e">digest in me-central2</text>
+      <rect x="630" y="40" width="160" height="64" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="710" y="66" font-size="13" font-weight="700" fill="#143628">4 · Gitops PR</text>
+      <text x="710" y="86" font-size="11" fill="#5c6d65">pin the digest</text>
+      <rect x="820" y="40" width="150" height="64" rx="8" fill="#143628"/>
+      <text x="895" y="66" font-size="13" font-weight="700" fill="#fff">5 · Argo CD</text>
+      <text x="895" y="86" font-size="11" fill="#d7ebe0">sync the cluster</text>
+    </g>
+    <path d="M190 72 H220" stroke="#1c5c3d" marker-end="url(#a10)"/>
+    <path d="M390 72 H420" stroke="#1c5c3d" marker-end="url(#a10)"/>
+    <path d="M600 72 H630" stroke="#1c5c3d" marker-end="url(#a10)"/>
+    <path d="M790 72 H820" stroke="#1c5c3d" marker-end="url(#a10)"/>
+
+    <rect x="30" y="160" width="450" height="220" rx="10" fill="#fff" stroke="#c5d5cc"/>
+    <text x="48" y="188" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#143628">Repositories</text>
+    <text x="48" y="216" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">namaa-platform — console and service source</text>
+    <text x="48" y="238" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">namaa-infra — Crossplane claims, one folder per env</text>
+    <text x="48" y="260" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">namaa-gitops — Kustomize overlays, image digests</text>
+    <text x="48" y="282" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">namaa-compositions — XRD and Composition packages</text>
+    <text x="48" y="312" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#5c6d65">Dev auto-syncs. Staging syncs on merge.</text>
+    <text x="48" y="332" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#5c6d65">Prod syncs when a release owner clicks Sync.</text>
+    <text x="48" y="356" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#8d6a22">Secrets are keys in Secret Manager, never files.</text>
+
+    <rect x="500" y="160" width="470" height="220" rx="10" fill="#143628"/>
+    <text x="518" y="188" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#fff">Sync waves on a workload cluster</text>
+    <text x="518" y="216" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">0  namespaces, quotas, default-deny policy</text>
+    <text x="518" y="238" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">1  External Secrets, certificate issuers</text>
+    <text x="518" y="260" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">2  EMQX and ingest</text>
+    <text x="518" y="282" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">3  domain services and recommender</text>
+    <text x="518" y="304" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">4  command path</text>
+    <text x="518" y="326" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">5  console, BFF, tiles</text>
+    <text x="518" y="354" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#e6c56b">Infra claims sync in their own Application, first.</text>
+  </svg>
+  <figcaption>Figure 7. Delivery. An image is admitted to production by a digest pinned in Git, then by a human sync, then by Binary Authorization.</figcaption>
+</figure>
+
+<h2>10.1 Repositories and promotion</h2>
+<p>CI builds on merge to the service repository, pushes to Artifact Registry in me-central2, and signs the image. A bot opens a pull request in namaa-gitops that changes only the digest for <strong>dev</strong>. Promotion to staging is a pull request that copies that digest. Promotion to prod is a release pull request with two reviews, one of them from the platform owner. Argo CD’s prod project has sync windows that exclude Fridays and public holidays unless an incident override is recorded in the change ticket.</p>
+<p>Argo CD projects are <code>infra</code>, <code>addons</code>, and <code>namaa</code>. The namaa project can only deploy into the application namespaces. It cannot create ClusterRole or anything in kube-system. Infra drift on a Crossplane claim pages the platform on-call; application drift auto-heals in dev and pages in prod without auto-heal, so a hotfix on a node is visible.</p>
+<p>Source repositories may be hosted outside the Kingdom. They hold no samples, no credentials, and no session recordings. If a later policy requires the Git host itself to be in the Kingdom, the same three repos move without a design change. That hosting choice is open (section 16).</p>
+
+<pre>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: namaa-control-prod
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: namaa
+  source:
+    repoURL: https://git.example.com/namaa/namaa-gitops.git
+    targetRevision: prod
+    path: control/overlays/prod
+  destination:
+    name: cke-prod
+    namespace: namaa-control
+  syncPolicy:
+    syncOptions: ["CreateNamespace=false"]</pre>
+
+<h1><span class="num">11</span>LGTM, hosted in the Kingdom</h1>
+<div class="rule"></div>
+<p>Observability is the Grafana LGTM stack running on its own CKE cluster in namaa-obs, in Dammam. <strong>Loki</strong> stores logs, <strong>Grafana</strong> is the console, <strong>Tempo</strong> stores traces, <strong>Mimir</strong> stores metrics. Blocks and index live on GCS buckets in me-central2. This is not Grafana Cloud. Collectors do not remote-write to an endpoint outside the Kingdom, and the NAT allow-list makes that path fail closed.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LGTM pipeline">
+    <defs>
+      <marker id="a11" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1d4e6e"/></marker>
+    </defs>
+    <rect width="1000" height="360" fill="#f7faf8"/>
+    <g font-family="Avenir Next, Helvetica, sans-serif" text-anchor="middle">
+      <rect x="24" y="40" width="180" height="90" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="114" y="74" font-size="13" font-weight="700" fill="#143628">App pods</text>
+      <text x="114" y="96" font-size="11" fill="#5c6d65">OTLP traces, metrics</text>
+      <text x="114" y="112" font-size="11" fill="#5c6d65">stdout logs</text>
+      <rect x="240" y="40" width="180" height="90" rx="8" fill="#1d4e6e"/>
+      <text x="330" y="74" font-size="13" font-weight="700" fill="#fff">Alloy DaemonSet</text>
+      <text x="330" y="96" font-size="11" fill="#e7f1f7">On every CKE node</text>
+      <text x="330" y="112" font-size="11" fill="#e7f1f7">mgmt, nonprod, prod</text>
+      <rect x="460" y="24" width="520" height="250" rx="10" fill="#143628"/>
+      <text x="720" y="52" font-size="12" font-weight="700" fill="#e6c56b">namaa-obs · Dammam · stays here</text>
+      <rect x="488" y="74" width="140" height="70" rx="8" fill="#1c5c3d"/>
+      <text x="558" y="104" font-size="14" font-weight="700" fill="#fff">Mimir</text>
+      <text x="558" y="124" font-size="11" fill="#d7ebe0">metrics · 30 d</text>
+      <rect x="648" y="74" width="140" height="70" rx="8" fill="#1c5c3d"/>
+      <text x="718" y="104" font-size="14" font-weight="700" fill="#fff">Loki</text>
+      <text x="718" y="124" font-size="11" fill="#d7ebe0">logs</text>
+      <rect x="808" y="74" width="140" height="70" rx="8" fill="#1c5c3d"/>
+      <text x="878" y="104" font-size="14" font-weight="700" fill="#fff">Tempo</text>
+      <text x="878" y="124" font-size="11" fill="#d7ebe0">traces · 14 d</text>
+      <rect x="560" y="164" width="300" height="70" rx="8" fill="#e6c56b"/>
+      <text x="710" y="194" font-size="14" font-weight="700" fill="#143628">Grafana</text>
+      <text x="710" y="214" font-size="11" fill="#143628">SSO via the IdP · admin via Teleport</text>
+    </g>
+    <path d="M204 85 H240" stroke="#1d4e6e" marker-end="url(#a11)"/>
+    <path d="M420 85 H488" stroke="#1d4e6e" marker-end="url(#a11)"/>
+    <text x="24" y="300" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">Log retention: application 90 days, audit and Teleport session index 365 days. Both on GCS in me-central2.</text>
+    <text x="24" y="322" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">Agronomic charts on the NAMAA console read PostgreSQL. They do not query Loki.</text>
+    <text x="24" y="344" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#8a3b34">A security-log copy goes to the MDR service after a vendor is chosen. Loki keeps the operational copy.</text>
+  </svg>
+  <figcaption>Figure 8. LGTM stays in the Kingdom. Grafana is how SRE looks at the platform. It is not the agronomist’s dashboard.</figcaption>
+</figure>
+
+<h2>11.1 What is collected</h2>
+<ul>
+  <li><strong>Metrics.</strong> Golden signals per service (rate, errors, duration), broker depth, ingest lag, command lag, recommendation cycle time, node and pod saturation, certificate expiry.</li>
+  <li><strong>Logs.</strong> Application logs as structured JSON with trace id, unit id where the request is about a unit, and no sensor payload. Audit logs from Cloud Audit, GKE audit, Argo CD, and Teleport.</li>
+  <li><strong>Traces.</strong> BFF to domain service to database. Command path from approval to MQTT publish. Ingest path from broker to commit.</li>
+</ul>
+<p>Alerts that page a human: ingest lag above 30 seconds for 10 minutes, command error budget burn, broker under-replicated, Cloud SQL failover, Argo CD prod out of sync, Teleport auth down, a denied location in a Crossplane event, Binary Authorization rejection in prod. Alert notifications stay on an in-Kingdom channel. The alert text carries identifiers, not sample values.</p>
+
+<h1><span class="num">12</span>Teleport</h1>
+<div class="rule"></div>
+<p>Teleport is the privileged-access system. It is the way a human reaches a CKE API, a Cloud SQL session, an Argo CD admin screen, a Grafana admin screen, or a break-glass shell. Standing kubeconfigs are not issued. Certificates are short-lived. Every session is recorded, and the recording is stored on the management cluster’s in-region disk and bucket.</p>
+<table>
+  <tr><th>Role</th><th>Can open</th><th>Cannot</th></tr>
+  <tr><td>platform-admin</td><td>Management cluster, Crossplane, prod and nonprod Kubernetes, change-window SQL</td><td>Approve an agronomic setpoint</td></tr>
+  <tr><td>sre</td><td>Workload clusters read/debug, logs in Grafana, prod sync during an incident</td><td>Edit compositions, read Cloud SQL tables of personal data without a ticket</td></tr>
+  <tr><td>dba</td><td>Cloud SQL via the Teleport database agent, for a named ticket</td><td>kubectl</td></tr>
+  <tr><td>auditor</td><td>Session recordings, audit log, read-only Kubernetes</td><td>Exec, port-forward, SQL write</td></tr>
+  <tr><td>break-glass</td><td>Cluster admin for a timed access request with two approvals</td><td>Stay elevated. Access expires in 4 hours and pages security</td></tr>
+</table>
+<p>Each CKE cluster runs a Teleport Kubernetes agent. Cloud SQL is registered through the database agent in namaa-prod and namaa-nonprod; there is no direct authorized network from a laptop. Device trust is required for prod roles. The corporate IdP is the only SSO source. Local Teleport users are limited to the break-glass pair, stored offline.</p>
+<p>Join to a new cluster is part of the XCkeCluster composition: the agent token is written to Secret Manager and picked up by External Secrets. A cluster without a healthy agent fails its Crossplane readiness check.</p>
+
+<h1><span class="num">13</span>Cyfirma and managed detection</h1>
+<div class="rule"></div>
+<p>Cyfirma is the threat-intelligence source. Managed detection and response is a required capability, and the product that provides it has not been chosen. This section specifies the interface that vendor must meet. Neither capability sits on the path from a moisture sample to a valve. Both sit on the security plane, fed from namaa-sec, with copies of evidence still in LGTM. No security copy leaves the Kingdom until that vendor is selected and decision D4 is closed.</p>
+
+<figure>
+  <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Security plane">
+    <rect width="1000" height="400" fill="#f7faf8"/>
+    <rect x="20" y="20" width="960" height="150" rx="10" fill="#143628"/>
+    <text x="40" y="48" font-family="Avenir Next, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#e6c56b">Security telemetry, not agronomic telemetry</text>
+    <g font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#d7ebe0">
+      <text x="40" y="78">Cloud Audit Logs · VPC flow logs · GKE audit · Binary Authorization decisions</text>
+      <text x="40" y="100">Teleport session metadata · IdP sign-in · Cloud Armor denies · MQTT auth failures</text>
+      <text x="40" y="122">Argo CD admin actions · Secret access · Crossplane reconcile errors</text>
+      <text x="40" y="148" fill="#e6c56b">Sensor values, yield, and report packs are not in this stream.</text>
+    </g>
+    <g font-family="Avenir Next, Helvetica, sans-serif" text-anchor="middle">
+      <rect x="40" y="200" width="200" height="90" rx="8" fill="#f8eeec" stroke="#8a3b34"/>
+      <text x="140" y="234" font-size="14" font-weight="700" fill="#8a3b34">Cyfirma</text>
+      <text x="140" y="256" font-size="11" fill="#8a3b34">IOC, vulnerability,</text>
+      <text x="140" y="272" font-size="11" fill="#8a3b34">brand and domain intel</text>
+      <rect x="280" y="200" width="200" height="90" rx="8" fill="#fff" stroke="#8a3b34"/>
+      <text x="380" y="234" font-size="14" font-weight="700" fill="#143628">TI connector</text>
+      <text x="380" y="256" font-size="11" fill="#5c6d65">Pull on a schedule</text>
+      <text x="380" y="272" font-size="11" fill="#5c6d65">Store indicators in KSA</text>
+      <rect x="520" y="200" width="200" height="90" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="620" y="234" font-size="14" font-weight="700" fill="#143628">Enforce</text>
+      <text x="620" y="256" font-size="11" fill="#5c6d65">Cloud Armor address lists</text>
+      <text x="620" y="272" font-size="11" fill="#5c6d65">Egress deny additions</text>
+      <rect x="760" y="200" width="200" height="90" rx="8" fill="#8a3b34"/>
+      <text x="860" y="228" font-size="14" font-weight="700" fill="#fff">MDR</text>
+      <text x="860" y="248" font-size="11" fill="#f8eeec">Vendor to be selected</text>
+      <text x="860" y="266" font-size="11" fill="#f8eeec">24×7 detection</text>
+    </g>
+    <text x="40" y="330" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">Response that NAMAA can execute the same day: revoke a Teleport role, isolate a namespace network policy,</text>
+    <text x="40" y="350" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#1a2b24">rotate a secret through External Secrets, block an address at Cloud Armor, disable a device certificate.</text>
+    <text x="40" y="378" font-family="Avenir Next, Helvetica, sans-serif" font-size="12" fill="#8d6a22">The MDR vendor is not chosen. Where Cyfirma and that vendor store the copy they receive is a contract item, section 16.</text>
+  </svg>
+  <figcaption>Figure 9. Threat intelligence and MDR. Indicators flow in from Cyfirma. Security events flow out to the MDR service once a vendor is selected. The valve path is not on this drawing.</figcaption>
+</figure>
+
+<h2>13.1 Cyfirma</h2>
+<p>A connector workload in namaa-sec pulls indicators and intelligence items from the Cyfirma API on a fixed schedule and on demand during an incident. Pulled items are stored in a bucket and a table in the Kingdom. Three uses are in scope:</p>
+<ul>
+  <li><strong>Edge blocking.</strong> Network indicators that match the console’s exposure are compiled into a Cloud Armor address list. The list is reviewed by security before it is enforced, except for indicators Cyfirma marks as active exploitation against our own domains, which enforce immediately and page.</li>
+  <li><strong>Vulnerability context.</strong> Image and Kubernetes advisories are joined to the Artifact Registry inventory so a digest already pinned in Git can be flagged for a promotion freeze.</li>
+  <li><strong>Brand and domain.</strong> Lookalike domains and leaked operator mailboxes are tickets, not automatic controls.</li>
+</ul>
+<p>The connector’s credential is in Secret Manager, accessed through Workload Identity. Agronomic databases are not granted to that identity.</p>
+
+<h2>13.2 Managed detection and response</h2>
+<p>The MDR vendor will be selected later. Until that choice is made, the design names the capability, not a product. The chosen service watches the security stream, escalates findings, and recommends containment. NAMAA still executes containment, because the credentials that can change production sit with Teleport and Crossplane, not with the MDR tenant.</p>
+<p>The export is a filtered copy of the security stream in section 13’s diagram. It is shipped from namaa-sec by a dedicated forwarder, and that forwarder is not deployed until the vendor and the residency terms in D4 are agreed. Delivery failures alert in LGTM; they do not block ingest or irrigation. Findings come back as tickets into the same incident channel the SRE on-call already uses. A finding that names a unit gateway is treated as a device incident: revoke that device certificate, leave the last schedule running, and replace the gateway credential before the unit is allowed to reconnect.</p>
+
+<h1><span class="num">14</span>Security design</h1>
+<div class="rule"></div>
+<p>The control set is what NCA ECC and CCC themes ask a cloud workload to be able to show. This document does not claim that the programme is certified. It claims that the design has a place to put each of these controls.</p>
+<table>
+  <tr><th>Control</th><th>Where it lives</th></tr>
+  <tr><td>Asset inventory</td><td>Crossplane managed resources plus Argo CD applications are the inventory. A nightly export lands in the audit bucket</td></tr>
+  <tr><td>Access control</td><td>Console RBAC by role and region. Teleport for infrastructure. Two-person rule on prod Git and on break-glass</td></tr>
+  <tr><td>Least privilege</td><td>Workload Identity per service. Crossplane identity only on the management cluster. Argo CD project bounds</td></tr>
+  <tr><td>Cryptography</td><td>TLS everywhere, mTLS for gateways, CMEK with HSM for data stores, signed images</td></tr>
+  <tr><td>Logging and monitoring</td><td>LGTM in the Kingdom, security copy to the MDR service once a vendor is selected, session recording in Teleport</td></tr>
+  <tr><td>Vulnerability and threat intel</td><td>Image scanning in Artifact Registry, Cyfirma context, promotion freeze</td></tr>
+  <tr><td>Backup and recovery</td><td>SQL PITR, in-region backups, Git rebuild of clusters, gateway store-and-forward</td></tr>
+  <tr><td>Network security</td><td>Private clusters, default-deny policies, Cloud Armor, NAT allow-list, no public databases</td></tr>
+  <tr><td>Change management</td><td>Pull requests, prod manual sync, sync windows</td></tr>
+  <tr><td>Data residency</td><td>Organization policy, composition guards, orphan deletion policy on data stores</td></tr>
+</table>
+
+<h2>14.1 Device identity</h2>
+<p>Each gateway has a certificate whose common name is the unit id. The broker rejects a publish or a subscribe whose topic unit id does not match the certificate. Certificates are issued by a private CA in namaa-sec (Certificate Authority Service in me-central2). Rotation is yearly, or immediately on an MDR finding or an operator incident. A revoked certificate cannot drain the command topic of another unit.</p>
+
+<h2>14.2 Software supply</h2>
+<p>Production nodes run only images that Binary Authorization can tie to the CI signer and to a digest that namaa-gitops has merged. Base images are pinned. The console’s dependency install happens in CI, not on a laptop upload. Crossplane provider packages are pinned by digest in namaa-compositions the same way.</p>
+
+<h1><span class="num">15</span>Environments and operations</h1>
+<div class="rule"></div>
+
+<figure>
+  <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Environment promotion">
+    <defs>
+      <marker id="a15" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+    <rect width="1000" height="200" fill="#f7faf8"/>
+    <g font-family="Avenir Next, Helvetica, sans-serif" text-anchor="middle">
+      <rect x="30" y="40" width="200" height="110" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="130" y="78" font-size="16" font-weight="700" fill="#143628">Dev</text>
+      <text x="130" y="100" font-size="12" fill="#5c6d65">Namespace on nonprod</text>
+      <text x="130" y="118" font-size="12" fill="#5c6d65">Auto sync</text>
+      <text x="130" y="136" font-size="12" fill="#5c6d65">Synthetic gateways</text>
+      <rect x="300" y="40" width="200" height="110" rx="8" fill="#fff" stroke="#1c5c3d"/>
+      <text x="400" y="78" font-size="16" font-weight="700" fill="#143628">Staging</text>
+      <text x="400" y="100" font-size="12" fill="#5c6d65">Namespace on nonprod</text>
+      <text x="400" y="118" font-size="12" fill="#5c6d65">Sync on merge</text>
+      <text x="400" y="136" font-size="12" fill="#5c6d65">Release acceptance</text>
+      <rect x="570" y="40" width="200" height="110" rx="8" fill="#143628"/>
+      <text x="670" y="78" font-size="16" font-weight="700" fill="#fff">Prod</text>
+      <text x="670" y="100" font-size="12" fill="#d7ebe0">Own CKE cluster</text>
+      <text x="670" y="118" font-size="12" fill="#d7ebe0">Manual sync</text>
+      <text x="670" y="136" font-size="12" fill="#e6c56b">Live gateways</text>
+      <rect x="820" y="40" width="150" height="110" rx="8" fill="#1d4e6e"/>
+      <text x="895" y="78" font-size="16" font-weight="700" fill="#fff">Obs</text>
+      <text x="895" y="100" font-size="12" fill="#e7f1f7">LGTM cluster</text>
+      <text x="895" y="118" font-size="12" fill="#e7f1f7">Watches all three</text>
+      <text x="895" y="136" font-size="12" fill="#e7f1f7">Not a deploy target</text>
+    </g>
+    <path d="M230 95 H300" stroke="#1c5c3d" marker-end="url(#a15)"/>
+    <path d="M500 95 H570" stroke="#1c5c3d" marker-end="url(#a15)"/>
+  </svg>
+  <figcaption>Figure 10. Promotion. Dev and staging share the non-production CKE cluster and share nothing with production data.</figcaption>
+</figure>
+
+<h2>15.1 Acceptance of a release</h2>
+<p>Staging runs the three prototype scenarios against synthetic gateways before a prod sync is offered:</p>
+<ol>
+  <li>Moisture falling and a high temperature forecast produces an irrigation recommendation. Inside the envelope it dispatches; the synthetic flow meter verifies it.</li>
+  <li>Afternoon irradiance above the stress threshold produces a tilt recommendation that is refused when the energy-loss estimate is over 2%.</li>
+  <li>A forecast cloud band produces a battery pre-charge that the synthetic inverter acknowledges.</li>
+</ol>
+<p>A fourth check pulls the console off the gateway: with the broker partition for that unit black-holed, the gateway keeps the previous schedule and replays buffered samples when the partition returns.</p>
+
+<h2>15.2 Who operates what</h2>
+<table>
+  <tr><th>Concern</th><th>Owner</th></tr>
+  <tr><td>Crossplane compositions, CKE clusters, network</td><td>Platform engineering</td></tr>
+  <tr><td>Argo CD, release sync, image trust</td><td>Platform engineering with the service owner</td></tr>
+  <tr><td>LGTM dashboards, SLOs, on-call</td><td>SRE</td></tr>
+  <tr><td>Teleport roles, Cyfirma connector, MDR onboarding after the vendor is selected</td><td>Security</td></tr>
+  <tr><td>Envelopes, crop thresholds, recommendation acceptance</td><td>Agronomy</td></tr>
+  <tr><td>Report pack content for regulators</td><td>Analyst, from the reporting service</td></tr>
+  <tr><td>GCP subscription and Dammam access</td><td>CNTXT commercial path</td></tr>
+</table>
+
+<h2>15.3 Rebuild</h2>
+<p>A lost workload cluster is recreated by reconciling the XCkeCluster claim and letting Argo CD sync. Cloud SQL is restored from PITR into the same region. Gateways, which have been executing the last schedule, reconnect, replay samples, and receive any commands that were not acknowledged. A lost observability cluster is rebuilt the same way; it does not block irrigation. A lost management cluster is the painful one: compositions and Argo CD are reinstalled from namaa-compositions, Teleport authority is restored from its in-region backup, and no application deploy happens until Teleport session recording is healthy again.</p>
+
+<h1><span class="num">16</span>Decisions still open</h1>
+<div class="rule"></div>
+<table>
+  <tr><th>ID</th><th>Decision</th><th>Default in this design until it is closed</th></tr>
+  <tr><td>D1</td><td>CKE product name</td><td>GKE Standard, regional, private, in me-central2. The claim name stays XCkeCluster so a different engine is a composition swap</td></tr>
+  <tr><td>D2</td><td>Git host location</td><td>Source may sit outside the Kingdom. No data and no secrets in Git. Move the host if policy requires it</td></tr>
+  <tr><td>D3</td><td>Where Cyfirma stores what we send, and what we are willing to send</td><td>We send only our domains and our external IP ranges as the watch list. We pull indicators in. We do not push agronomic data</td></tr>
+  <tr><td>D4</td><td>Which MDR product to use, and where that tenant stores the security copy</td><td>No vendor is selected in this version. Export stays disabled until the product is chosen and the contract places that copy in the Kingdom, or an explicit written exception is recorded</td></tr>
+  <tr><td>D5</td><td>NCM commercial and technical interface</td><td>One adapter, forecasts cached in PostgreSQL, recommender never calls the provider live on the command path</td></tr>
+  <tr><td>D6</td><td>Identity provider product</td><td>One corporate OIDC IdP in front of both the console and Teleport. The IdP itself should be reachable from the Kingdom</td></tr>
+  <tr><td>D7</td><td>Timescale on Cloud SQL versus Timescale on a VM in the cluster</td><td>Cloud SQL with the extension if the Dammam Cloud SQL offering includes it; otherwise a PostgreSQL VM pair managed by an XSql-equivalent claim, still private and still CMEK</td></tr>
+  <tr><td>D8</td><td>Map basemap licensing</td><td>Tiles built and served in-cluster. No browser calls to a public tile CDN</td></tr>
+</table>
+
+<h2>16.1 Risks</h2>
+<table>
+  <tr><th>Risk</th><th>What we do about it</th></tr>
+  <tr><td>Dammam does not offer a managed service this design names (Memorystore, CA Service, or the Timescale extension)</td><td>The composition swaps to an in-cluster equivalent on the CKE cluster. Data still sits in me-central2. D7 is the known case</td></tr>
+  <tr><td>A gateway fleet is not ready when the console is</td><td>The console can run against synthetic gateways in nonprod and against a small pilot hub in prod. Actuation stays off until a hub passes the four acceptance checks</td></tr>
+  <tr><td>An operator treats a recommendation as already executed</td><td>The UI shows the state name (proposed, dispatched, verified). Verified requires a later sample. The prototype’s static “confidence” badge is not a success state</td></tr>
+  <tr><td>Residency exception creeps in through a SaaS default (Grafana Cloud, a public tile URL, a CI cache outside the region)</td><td>NAT allow-list and the organization location policy. A new egress destination is a security change, not an application change</td></tr>
+  <tr><td>Prod sync becomes informal</td><td>Manual sync, two reviews, sync windows, and an audit event in Loki when prod changes</td></tr>
+</table>
+
+<h1><span class="num">17</span>Build order</h1>
+<div class="rule"></div>
+<p>The order is the dependency order. A later step is not useful without the earlier one.</p>
+<ol>
+  <li><strong>Landing zone.</strong> Organization policy, Shared VPC, KMS, projects, Teleport, Argo CD, Crossplane compositions. Prove a private CKE cluster comes up from a claim and is reachable only through Teleport.</li>
+  <li><strong>LGTM.</strong> Observability cluster, Alloy on the management cluster, retention buckets, paging. No workload is deployed “temporarily without logs”.</li>
+  <li><strong>Data plane.</strong> Cloud SQL, Redis, Pub/Sub, GCS, External Secrets. Device CA.</li>
+  <li><strong>Edge path.</strong> EMQX, ingest, one synthetic gateway, samples visible in the console map.</li>
+  <li><strong>Control path.</strong> Recommender v1, envelopes, command, verification. The three acceptance scenarios.</li>
+  <li><strong>Domain screens.</strong> Land, irrigation, CEA, energy, economics, benchmarks, goals, report packs written to GCS.</li>
+  <li><strong>Security integrations.</strong> Cyfirma connector, and the MDR forwarder after a vendor is chosen and D3 and D4 are closed. Cloud Armor fed by indicators.</li>
+  <li><strong>Pilot hub.</strong> One regional hub on real gateways, actuation inside envelopes, then the rest of the hubs.</li>
+</ol>
+
+<h1><span class="num">18</span>Glossary</h1>
+<div class="rule"></div>
+<table>
+  <tr><th>Term</th><th>Meaning in this document</th></tr>
+  <tr><td>NAMAA / نماء</td><td>Namaa — Toward Sustainable Investment of Underutilized Lands in the Kingdom. The operating platform for that programme</td></tr>
+  <tr><td>Unit</td><td>20 ha, 1.2 MW, one gateway, a status of prep, prepared, or active</td></tr>
+  <tr><td>CKE</td><td>The Kubernetes engine running workloads. Implemented as GKE</td></tr>
+  <tr><td>GKE</td><td>Google Kubernetes Engine</td></tr>
+  <tr><td>me-central2</td><td>Google Cloud region in Dammam, inside the Kingdom</td></tr>
+  <tr><td>LGTM</td><td>Loki, Grafana, Tempo, and Mimir, self-hosted in Dammam</td></tr>
+  <tr><td>Envelope</td><td>The numeric box inside which a recommendation may auto-apply</td></tr>
+  <tr><td>CEA</td><td>Controlled-environment agriculture, the vertical-farming modules</td></tr>
+  <tr><td>LER</td><td>Land equivalent ratio, the dual-use productivity lift</td></tr>
+  <tr><td>NCM</td><td>National Center for Meteorology, the forecast source</td></tr>
+  <tr><td>CNTXT</td><td>The reseller path Google Cloud documents for KSA billing and Dammam access</td></tr>
+  <tr><td>PAM</td><td>Privileged access management, provided by Teleport</td></tr>
+  <tr><td>MDR</td><td>Managed detection and response. The product is not selected yet; this design specifies the interface, and the vendor will be chosen later</td></tr>
+</table>
+
+<p class="small" style="margin-top:16px;">End of NAMAA-TDD-001, version 1.1. The prototype console remains the reference for screen content and for the product name. This document is the reference for how that console runs, on what, and under which controls.</p>
+
+</body>
+</html>

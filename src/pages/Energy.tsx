@@ -10,35 +10,37 @@ import {
 import { Sun } from 'lucide-react'
 import { Badge, Card, PageHeader } from '../components/ui'
 import { ENERGY_HOURLY } from '../data/namaa'
+import { useI18n } from '../i18n'
 
 export default function Energy() {
+  const { t } = useI18n()
   return (
     <div>
       <PageHeader
-        kicker="Agrivoltaics"
-        title="PV generation & energy routing"
-        description="Real-time solar output routed to irrigation pumps or battery storage."
+        kicker={t('Agrivoltaics')}
+        title={t('PV generation & energy routing')}
+        description={t('Real-time solar output routed to irrigation pumps or battery storage.')}
         icon={<Sun size={22} />}
       />
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <Card className="p-4">
-          <Badge tone="solar">Live</Badge>
+          <Badge tone="solar">{t('Live')}</Badge>
           <div className="mt-2 text-2xl font-black text-emerald-950">486.2 MW</div>
-          <div className="text-xs text-emerald-800/55">Fleet generation now</div>
+          <div className="text-xs text-emerald-800/55">{t('Fleet generation now')}</div>
         </Card>
         <Card className="p-4">
-          <Badge tone="water">Pumps</Badge>
+          <Badge tone="water">{t('Pumps')}</Badge>
           <div className="mt-2 text-2xl font-black text-emerald-950">110 MW</div>
-          <div className="text-xs text-emerald-800/55">Irrigation load</div>
+          <div className="text-xs text-emerald-800/55">{t('Irrigation load')}</div>
         </Card>
         <Card className="p-4">
-          <Badge tone="leaf">Storage</Badge>
+          <Badge tone="leaf">{t('Storage')}</Badge>
           <div className="mt-2 text-2xl font-black text-emerald-950">190 MW</div>
-          <div className="text-xs text-emerald-800/55">Charging batteries</div>
+          <div className="text-xs text-emerald-800/55">{t('Charging batteries')}</div>
         </Card>
       </div>
       <Card className="p-5">
-        <h2 className="mb-4 font-bold text-emerald-950">Dispatch by hour</h2>
+        <h2 className="mb-4 font-bold text-emerald-950">{t('Dispatch by hour')}</h2>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={ENERGY_HOURLY}>
@@ -46,9 +48,9 @@ export default function Energy() {
               <XAxis dataKey="t" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="gen" name="Generated" fill="#f59e0b" radius={4} />
-              <Bar dataKey="pump" name="Pumps" fill="#06b6d4" radius={4} />
-              <Bar dataKey="battery" name="Battery" fill="#16a34a" radius={4} />
+              <Bar dataKey="gen" name={t('Generated')} fill="#f59e0b" radius={4} />
+              <Bar dataKey="pump" name={t('Pumps')} fill="#06b6d4" radius={4} />
+              <Bar dataKey="battery" name={t('Battery')} fill="#16a34a" radius={4} />
             </BarChart>
           </ResponsiveContainer>
         </div>

@@ -33,10 +33,16 @@ export default function KsaMap({
     const map = L.map(el, {
       scrollWheelZoom: false,
       zoomControl: true,
-      maxBounds: KSA_BOUNDS.pad(0.15),
-      maxBoundsViscosity: 0.7,
+      maxBounds: KSA_BOUNDS.pad(0.4),
+      maxBoundsViscosity: 0.85,
       minZoom: 5,
-    }).fitBounds(KSA_BOUNDS, { padding: [16, 16] })
+    })
+    const fit = () => {
+      map.invalidateSize()
+      if (map.getSize().x < 20 || map.getSize().y < 20) return
+      map.fitBounds(KSA_BOUNDS, { padding: [24, 24], animate: false })
+    }
+    fit()
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -45,7 +51,7 @@ export default function KsaMap({
 
     for (const m of markers) {
       const marker = L.circleMarker([m.lat, m.lng], {
-        radius: m.label ? 11 : 8,
+        radius: m.label ? 9 : 5,
         color: '#fff',
         weight: 2,
         fillColor: m.color,
@@ -62,8 +68,8 @@ export default function KsaMap({
       marker.addTo(map)
     }
 
-    const onResize = () => map.invalidateSize()
-    const t = window.setTimeout(onResize, 80)
+    const onResize = () => fit()
+    const t = window.setTimeout(fit, 150)
     window.addEventListener('resize', onResize)
 
     return () => {

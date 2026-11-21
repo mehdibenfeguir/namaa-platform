@@ -1,15 +1,19 @@
 import { Sprout } from 'lucide-react'
 import { Card, PageHeader, Progress } from '../components/ui'
 import { CEA_MODULES } from '../data/namaa'
+import { useI18n } from '../i18n'
 import { num } from '../lib/format'
 
 export default function Cea() {
+  const { t } = useI18n()
   return (
     <div>
       <PageHeader
-        kicker="Controlled environment"
-        title="Vertical farming management"
-        description="Nutrient and climate telemetry for high-value organic crops in CEA modules."
+        kicker={t('Controlled environment')}
+        title={t('Vertical farming management')}
+        description={t(
+          'Nutrient and climate telemetry for high-value organic crops in CEA modules.',
+        )}
         icon={<Sprout size={22} />}
       />
       <div className="grid gap-4 md:grid-cols-2">
@@ -18,11 +22,11 @@ export default function Cea() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs font-bold text-emerald-800/45">{m.id}</div>
-                <h3 className="text-lg font-bold text-emerald-950">{m.crop}</h3>
+                <h3 className="text-lg font-bold text-emerald-950">{t(m.crop)}</h3>
               </div>
               <div className="text-right">
                 <div className="text-xl font-black text-leaf-700">{num(m.yieldKg)}</div>
-                <div className="text-[11px] text-emerald-800/50">kg YTD</div>
+                <div className="text-[11px] text-emerald-800/50">{t('kg YTD')}</div>
               </div>
             </div>
             <div className="mt-4 grid grid-cols-4 gap-2 text-center">

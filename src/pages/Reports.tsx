@@ -1,6 +1,7 @@
 import { FileBarChart, FileSpreadsheet, FileText } from 'lucide-react'
 import { Badge, Button, Card, PageHeader } from '../components/ui'
 import { IMPACT } from '../data/namaa'
+import { useI18n } from '../i18n'
 import { num } from '../lib/format'
 
 function download(filename: string, content: string, type: string) {
@@ -14,6 +15,7 @@ function download(filename: string, content: string, type: string) {
 }
 
 export default function Reports() {
+  const { t } = useI18n()
   const csv = [
     'Metric,Value,Unit',
     `CO2 avoided,${IMPACT.co2AvoidedT},tCO2e/yr`,
@@ -34,9 +36,11 @@ Organic crop yield: ${num(IMPACT.organicTons)} t / year
   return (
     <div>
       <PageHeader
-        kicker="Analytics"
-        title="Sustainability & Vision 2030 reports"
-        description="Periodic impact figures for partners, investors, and regulators. Exports are generated in-browser from static demo data."
+        kicker={t('Analytics')}
+        title={t('Sustainability & Vision 2030 reports')}
+        description={t(
+          'Periodic impact figures for partners, investors, and regulators. Exports are generated in-browser from static demo data.',
+        )}
         icon={<FileBarChart size={22} />}
         actions={
           <div className="flex gap-2">
@@ -44,14 +48,14 @@ Organic crop yield: ${num(IMPACT.organicTons)} t / year
               variant="outline"
               onClick={() => download('namaa-impact.csv', csv, 'text/csv')}
             >
-              <FileSpreadsheet size={16} /> Excel / CSV
+              <FileSpreadsheet size={16} /> {t('Excel / CSV')}
             </Button>
             <Button
               onClick={() =>
                 download('namaa-impact-report.txt', reportText, 'text/plain')
               }
             >
-              <FileText size={16} /> PDF pack (text)
+              <FileText size={16} /> {t('PDF pack (text)')}
             </Button>
           </div>
         }
@@ -65,23 +69,20 @@ Organic crop yield: ${num(IMPACT.organicTons)} t / year
           ['Organic yield', `${num(IMPACT.organicTons)} t`, 'CEA + field organics'],
         ].map(([k, v, h]) => (
           <Card key={k} className="p-5">
-            <div className="text-xs uppercase text-emerald-800/50">{k}</div>
+            <div className="text-xs uppercase text-emerald-800/50">{t(k)}</div>
             <div className="mt-1 text-2xl font-black text-emerald-950">{v}</div>
-            <div className="mt-1 text-xs text-emerald-800/55">{h}</div>
+            <div className="mt-1 text-xs text-emerald-800/55">{t(h)}</div>
           </Card>
         ))}
       </div>
 
       <Card className="mt-4 p-6">
-        <Badge tone="leaf">Q3 2026 · draft for stakeholders</Badge>
-        <h2 className="mt-3 text-lg font-bold text-emerald-950">Narrative summary</h2>
+        <Badge tone="leaf">{t('Q3 2026 · draft for stakeholders')}</Badge>
+        <h2 className="mt-3 text-lg font-bold text-emerald-950">{t('Narrative summary')}</h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-emerald-900/70">
-          NAMAA dual-uses unprepared desert land: 1.2 MW agrivoltaic blocks shade
-          crops, cut soil temperature by 2.5°C, and power sub-surface drip. Water
-          use is 37.4% below baseline (target 35–40%). Land Equivalent Ratio is
-          1.62 — a 62% productivity lift versus single-use farming. Exports above
-          are dummy files for the demo; a production build would stream signed
-          PDF/XLSX from the reporting service.
+          {t(
+            'NAMAA dual-uses unprepared desert land: 1.2 MW agrivoltaic blocks shade crops, cut soil temperature by 2.5°C, and power sub-surface drip. Water use is 37.4% below baseline (target 35–40%). Land Equivalent Ratio is 1.62 — a 62% productivity lift versus single-use farming. Exports above are dummy files for the demo; a production build would stream signed PDF/XLSX from the reporting service.',
+          )}
         </p>
       </Card>
     </div>

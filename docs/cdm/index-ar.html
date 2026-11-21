@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>نماء — نموذج البيانات المفاهيمي</title>
+<style>
+  :root {
+    --ink: #1a2b24;
+    --muted: #5c6d65;
+    --line: #d5ddd8;
+    --green: #1c5c3d;
+    --pale: #e7f2eb;
+    --gold: #8d6a22;
+    --gold-pale: #f8f1de;
+    --blue: #1d4e6e;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+    direction: rtl;
+    font-family: "Geeza Pro", "SF Arabic", "Noto Naskh Arabic", "Arial", sans-serif;
+    font-size: 12pt;
+    line-height: 1.7;
+    background: white;
+  }
+  h1 {
+    font-size: 20pt;
+    line-height: 1.35;
+    color: var(--green);
+    font-weight: 700;
+    margin: 16px 0 8px;
+    break-after: avoid;
+  }
+  h1 .num {
+    display: block;
+    font-size: 10pt;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  h2 {
+    font-size: 14pt;
+    color: var(--green);
+    margin: 12px 0 6px;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8px; }
+  ul { margin: 4px 0 10px; padding-right: 1.2em; padding-left: 0; }
+  li { margin: 0 0 4px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 12px;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 5px 8px;
+    vertical-align: top;
+    text-align: right;
+  }
+  th { background: var(--pale); color: var(--green); font-weight: 700; }
+  tr { break-inside: avoid; }
+  figure { margin: 10px 0 14px; break-inside: avoid; }
+  figcaption { font-size: 10pt; color: var(--muted); margin-top: 4px; }
+  svg { width: 100%; height: auto; display: block; }
+  .rule { height: 3px; background: var(--green); margin: 6px 0 12px; }
+  .kicker { letter-spacing: 0.08em; font-size: 10pt; font-weight: 700; color: var(--gold); }
+  .callout {
+    break-inside: avoid;
+    border: 1px solid #e3d3a4;
+    background: var(--gold-pale);
+    padding: 8px 12px;
+    margin: 8px 0 12px;
+  }
+  .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+  .small { font-size: 10.5pt; color: var(--muted); }
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+</style>
+</head>
+<body>
+
+<section>
+  <div style="background:#143628; color:#f4f7f2; padding:28px 32px 26px;">
+    <div class="kicker" style="color:#e6c56b;">NAMAA-CDM-001 · الإصدار 1.0 · 22 نوفمبر 2026</div>
+    <div style="font-size:14pt; margin-top:16px; color:#d7ebe0;">نماء</div>
+    <div style="font-size:28pt; font-weight:700; line-height:1.35; margin-top:4px;">نموذج البيانات المفاهيمي</div>
+    <div style="font-size:14pt; font-weight:700; margin-top:10px;">نماء: نحو استثمار مستدام للأراضي غير المستغلة في المملكة.</div>
+    <div style="margin-top:8px; font-size:12.5pt; color:#d7ebe0;">منصة رقمية تربط بسلاسة وشفافية الأراضي غير المستغلة بفرص الاستصلاح والتأهيل والاستثمار.</div>
+  </div>
+  <div style="padding:14px 2px 0;">
+    <table>
+      <tr><th>البند</th><th>القيمة</th></tr>
+      <tr><td>رمز الوثيقة</td><td class="ltr">NAMAA-CDM-001</td></tr>
+      <tr><td>الوثيقة</td><td>نموذج البيانات المفاهيمي</td></tr>
+      <tr><td>النظام</td><td>بوابة نماء</td></tr>
+      <tr><td>الحالة</td><td>مطابق للنسخة التجريبية الحالية</td></tr>
+      <tr><td>التاريخ</td><td>22 نوفمبر 2026</td></tr>
+      <tr><td>اللغة</td><td>العربية</td></tr>
+    </table>
+    <p>يصف هذا النموذج مفاهيم العمل والقواعد التي تربطها. هو ليس مخطط قاعدة بيانات.</p>
+  </div>
+</section>
+
+<h1><span class="num">٠١</span>الغرض</h1>
+<div class="rule"></div>
+<p>تعمل ثلاثة أنواع من الجهات على سجل الأرض نفسه.</p>
+<ul>
+  <li><strong>الجهة الحكومية</strong> تدير المشهد الوطني، وتقرر في <strong>الأرض العامة</strong> فقط.</li>
+  <li><strong>مالك الأرض</strong> يقرر لقطعه: تبقى خاصة، أو تُعرض للبيع، أو تُفتح للاستغلال.</li>
+  <li><strong>المستثمر</strong> يرى ما يُعرض فقط، ثم يطلب الشراء أو الاستغلال.</li>
+</ul>
+
+<figure>
+  <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ثلاث جهات حول قطعة واحدة">
+    <rect width="980" height="250" fill="#f7faf8"/>
+    <rect x="360" y="78" width="260" height="92" rx="12" fill="#143628"/>
+    <text x="490" y="116" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="18" font-weight="700" fill="#fff">قطعة الأرض</text>
+    <text x="490" y="142" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="13" fill="#d7ebe0">مالك واحد · عرض واحد</text>
+
+    <rect x="726" y="28" width="230" height="72" rx="10" fill="#fff" stroke="#1d4e6e" stroke-width="1.6"/>
+    <text x="841" y="58" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#1d4e6e">الجهة الحكومية</text>
+    <text x="841" y="80" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">الأرض العامة فقط</text>
+    <path d="M726 64 H620" stroke="#1d4e6e" stroke-width="1.6" marker-end="url(#arrBlue)"/>
+
+    <rect x="726" y="150" width="230" height="72" rx="10" fill="#fff" stroke="#1c5c3d" stroke-width="1.6"/>
+    <text x="841" y="180" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#1c5c3d">مالك الأرض</text>
+    <text x="841" y="202" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">حيازته فقط</text>
+    <path d="M726 186 H620" stroke="#1c5c3d" stroke-width="1.6" marker-end="url(#arrGreen)"/>
+
+    <rect x="24" y="88" width="230" height="72" rx="10" fill="#fff" stroke="#8d6a22" stroke-width="1.6"/>
+    <text x="139" y="118" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#8d6a22">المستثمر</text>
+    <text x="139" y="140" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">يشتري أو يستغل المعروض</text>
+    <path d="M254 124 H360" stroke="#8d6a22" stroke-width="1.6" marker-end="url(#arrGold)"/>
+    <defs>
+      <marker id="arrBlue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1d4e6e"/></marker>
+      <marker id="arrGreen" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+      <marker id="arrGold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8d6a22"/></marker>
+    </defs>
+  </svg>
+  <figcaption>الشكل ١. الجهة الحكومية تقرر في الأرض العامة. المالك يقرر في حيازته. المستثمر يتصرف في الأرض المعروضة فقط.</figcaption>
+</figure>
+
+<h1><span class="num">٠٢</span>مجالات الموضوع</h1>
+<div class="rule"></div>
+
+<figure>
+  <svg viewBox="0 0 980 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="مجالات الموضوع">
+    <rect width="980" height="280" fill="#f7faf8"/>
+    <rect x="750" y="36" width="200" height="78" rx="10" fill="#1d4e6e"/>
+    <text x="850" y="70" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#fff">الجهة والحساب</text>
+    <text x="850" y="92" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#d6eaf3">من يدخل</text>
+
+    <rect x="390" y="36" width="250" height="78" rx="10" fill="#1c5c3d"/>
+    <text x="515" y="70" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#fff">قطعة الأرض والعرض</text>
+    <text x="515" y="92" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#d7ebe0">خاصة أو بيع أو استغلال</text>
+
+    <rect x="30" y="36" width="240" height="78" rx="10" fill="#8d6a22"/>
+    <text x="150" y="70" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#fff">طلب الاستثمار</text>
+    <text x="150" y="92" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#f8f1de">شراء أو استغلال</text>
+
+    <rect x="390" y="176" width="250" height="72" rx="10" fill="#fff" stroke="#1c5c3d" stroke-width="1.6"/>
+    <text x="515" y="206" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#1c5c3d">التشغيل</text>
+    <text x="515" y="228" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">حساسات وماء وطاقة وتكلفة</text>
+
+    <path d="M750 75 H640" stroke="#1a2b24" stroke-width="1.6" marker-end="url(#arrInk)"/>
+    <path d="M390 75 H270" stroke="#1a2b24" stroke-width="1.6" marker-end="url(#arrInk)"/>
+    <path d="M850 114 C850 200 700 212 640 212" fill="none" stroke="#1d4e6e" stroke-width="1.4" marker-end="url(#arrBlue2)"/>
+    <path d="M515 114 V176" stroke="#1c5c3d" stroke-width="1.6" marker-end="url(#arrGreen2)"/>
+    <text x="690" y="64" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">يملك</text>
+    <text x="300" y="64" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">يستقبل</text>
+    <text x="700" y="168" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1d4e6e">المستثمر يقدّم</text>
+    <text x="528" y="152" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1c5c3d">يُراقَب</text>
+    <defs>
+      <marker id="arrInk" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+      <marker id="arrBlue2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1d4e6e"/></marker>
+      <marker id="arrGreen2" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+  </svg>
+  <figcaption>الشكل ٢. أربعة مجالات. الثلاثة الأولى مسار الاستثمار. التشغيل هو نظرة الجهة الحكومية إلى الأرض التي بدأ استصلاحها.</figcaption>
+</figure>
+
+<table>
+  <tr><th>المجال</th><th>ما يضمّه</th></tr>
+  <tr><td>الجهة والحساب</td><td>من يستطيع الدخول، وأي حيازة أو مكتب يمثّل</td></tr>
+  <tr><td>قطعة الأرض والعرض</td><td>وحدة أرض، ومالكها، وهل هي خاصة أو للبيع أو مفتوحة للاستغلال</td></tr>
+  <tr><td>طلب الاستثمار</td><td>طلب مستثمر للشراء أو الاستغلال، والقرار على هذا الطلب</td></tr>
+  <tr><td>التشغيل</td><td>الحساسات والري والزراعة والطاقة والتكلفة على أرض دخلت البرنامج</td></tr>
+</table>
+
+<h1><span class="num">٠٣</span>الجهة والحساب</h1>
+<div class="rule"></div>
+<h2>الجهة</h2>
+<p>الجهة منظمة، وليست اسم دخول.</p>
+<table>
+  <tr><th>الصفة</th><th>المعنى</th></tr>
+  <tr><td>معرّف الجهة</td><td class="ltr">mewa · nakheel · waha · state · gulf</td></tr>
+  <tr><td>الاسم</td><td>الاسم بالعربية والإنجليزية</td></tr>
+  <tr><td>النوع</td><td>حكومية، أو مالك، أو مستثمر، أو أرض عامة</td></tr>
+</table>
+<p>الأرض العامة هي الدولة بصفتها مالكة. حساب الجهة الحكومية يتصرف في هذه الأرض. هو ليس مالكاً ثانياً.</p>
+<table>
+  <tr><th>الجهة</th><th>الاسم</th><th>النوع</th></tr>
+  <tr><td class="ltr">MEWA Operator</td><td>مشغّل الوزارة</td><td>حكومية</td></tr>
+  <tr><td class="ltr">Al-Nakheel Holdings</td><td>مجموعة النخيل</td><td>مالك</td></tr>
+  <tr><td class="ltr">Waha Desert Estates</td><td>واحة العقارية</td><td>مالك</td></tr>
+  <tr><td>Public land</td><td>أرض عامة (الدولة)</td><td>عامة</td></tr>
+  <tr><td class="ltr">Gulf Green Capital</td><td>الخليج الأخضر</td><td>مستثمر</td></tr>
+</table>
+
+<h2>الحساب</h2>
+<p>الحساب هو طريقة دخول شخص إلى البوابة نيابة عن جهة واحدة. يمكن أن يكون للجهة عدة حسابات لاحقاً. في النسخة التجريبية لكل جهة حساب واحد. كلمة المرور المشتركة هي <strong>namaa</strong>.</p>
+<table>
+  <tr><th>البريد</th><th>الدور</th><th>الجهة</th></tr>
+  <tr><td class="ltr">gov@namaa.sa</td><td>جهة حكومية</td><td>الوزارة</td></tr>
+  <tr><td class="ltr">owner@namaa.sa</td><td>مالك</td><td>مجموعة النخيل</td></tr>
+  <tr><td class="ltr">waha@namaa.sa</td><td>مالك</td><td>واحة العقارية</td></tr>
+  <tr><td class="ltr">investor@namaa.sa</td><td>مستثمر</td><td>الخليج الأخضر</td></tr>
+</table>
+
+<h1><span class="num">٠٤</span>قطعة الأرض والعرض</h1>
+<div class="rule"></div>
+<p>القطعة وحدة مسجّلة داخل المملكة. لها مالك واحد، ومنطقة، وموقع داخل اليابسة، ومساحة بالهكتار، وقدرة بالميغاواط، ومحصول، وحالة زراعة، وعرض حالي واحد.</p>
+<table>
+  <tr><th>الصفة</th><th>المعنى</th></tr>
+  <tr><td>رقم القطعة</td><td>مثل U-012</td></tr>
+  <tr><td>المالك</td><td>جهة مالكة، أو الأرض العامة</td></tr>
+  <tr><td>المنطقة</td><td>الرياض، جدة، المدينة، المنطقة الشرقية، تبوك، العلا، نجران، القصيم، جازان، الجوف</td></tr>
+  <tr><td>حالة الزراعة</td><td>زراعة نشطة، أو مهيأة، أو قيد التهيئة</td></tr>
+  <tr><td>العرض</td><td>الوضع التجاري الحالي: خاصة، أو للبيع، أو مفتوحة للاستغلال</td></tr>
+</table>
+<p>مستهدفات البرنامج فوق القطعة: 10,000 هكتار للاستصلاح، وعدد الوحدات المخططة، والمساحة المستصلحة. هذه أرقام البرنامج، وليست صفات لقطعة واحدة.</p>
+
+<figure>
+  <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="خيارات العرض">
+    <rect width="980" height="300" fill="#f7faf8"/>
+    <rect x="370" y="18" width="240" height="70" rx="10" fill="#5c6d65"/>
+    <text x="490" y="60" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="18" font-weight="700" fill="#fff">أبقِها خاصة</text>
+
+    <rect x="660" y="175" width="250" height="78" rx="10" fill="#8d6a22"/>
+    <text x="785" y="220" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="20" font-weight="700" fill="#fff">بيع</text>
+
+    <rect x="70" y="175" width="270" height="78" rx="10" fill="#1c5c3d"/>
+    <text x="205" y="220" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="18" font-weight="700" fill="#fff">مفتوح للاستغلال</text>
+
+    <path d="M470 88 C620 120 720 145 785 175" fill="none" stroke="#8d6a22" stroke-width="1.6" marker-end="url(#g3)"/>
+    <path d="M510 88 C360 120 270 145 205 175" fill="none" stroke="#1c5c3d" stroke-width="1.6" marker-end="url(#g4)"/>
+    <path d="M785 175 C700 130 600 110 510 88" fill="none" stroke="#5c6d65" stroke-width="1.3" marker-end="url(#g5)"/>
+    <path d="M205 175 C300 130 400 110 470 88" fill="none" stroke="#5c6d65" stroke-width="1.3" marker-end="url(#g5)"/>
+    <path d="M660 210 H340" stroke="#1a2b24" stroke-width="1.5" marker-end="url(#g6)"/>
+    <path d="M340 232 H660" stroke="#1a2b24" stroke-width="1.5" marker-end="url(#g6)"/>
+
+    <text x="680" y="140" font-family="Geeza Pro, sans-serif" font-size="13" fill="#8d6a22">بيع</text>
+    <text x="250" y="140" font-family="Geeza Pro, sans-serif" font-size="13" fill="#1c5c3d">فتح</text>
+    <text x="640" y="162" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">إبقاء خاصة</text>
+    <text x="250" y="162" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">إبقاء خاصة</text>
+    <text x="500" y="204" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1a2b24">تبديل</text>
+    <text x="500" y="250" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1a2b24">تبديل</text>
+    <defs>
+      <marker id="g3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8d6a22"/></marker>
+      <marker id="g4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+      <marker id="g5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#5c6d65"/></marker>
+      <marker id="g6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+    </defs>
+  </svg>
+  <figcaption>الشكل ٣. عرض حالي واحد. المالك يضعه على قطعه. الجهة الحكومية تضعه على الأرض العامة فقط.</figcaption>
+</figure>
+
+<table>
+  <tr><th>العرض</th><th>من يضعه</th><th>ما يراه المستثمر</th></tr>
+  <tr><td>خاصة</td><td>المالك</td><td>لا يرى القطعة</td></tr>
+  <tr><td>للبيع</td><td>المالك</td><td>القطعة، مع «اشترِ الأرض»</td></tr>
+  <tr><td>مفتوح للاستغلال</td><td>المالك</td><td>القطعة، مع «استغل الأرض»</td></tr>
+</table>
+<div class="callout"><strong>المالك.</strong> في الحيازة الخاصة المالك هو مجموعة النخيل أو واحة العقارية. في الأرض العامة المالك هو الجهة الحكومية. الجهة الحكومية تغيّر عرض الأرض العامة. كل مالك يغيّر قطع حيازته.</div>
+
+<h1><span class="num">٠٥</span>طلب الاستثمار</h1>
+<div class="rule"></div>
+<p>الطلب هو مستثمر واحد يسأل عن قطعة واحدة. النوع شراء أو استغلال. الحالة قيد الانتظار، أو مقبول، أو مرفوض.</p>
+
+<figure>
+  <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="دورة الطلب">
+    <rect width="980" height="250" fill="#f7faf8"/>
+    <rect x="780" y="90" width="170" height="64" rx="10" fill="#fff" stroke="#8d6a22" stroke-width="1.6"/>
+    <text x="865" y="118" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#8d6a22">المستثمر يطلب</text>
+    <text x="865" y="138" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="11" fill="#5c6d65">النوع يطابق العرض</text>
+
+    <rect x="540" y="90" width="160" height="64" rx="10" fill="#f8f1de" stroke="#8d6a22" stroke-width="1.6"/>
+    <text x="620" y="128" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#8d6a22">قيد الانتظار</text>
+
+    <rect x="270" y="28" width="180" height="58" rx="10" fill="#1c5c3d"/>
+    <text x="360" y="62" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#fff">مقبول</text>
+
+    <rect x="270" y="156" width="180" height="58" rx="10" fill="#8a3b34"/>
+    <text x="360" y="190" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#fff">مرفوض</text>
+
+    <rect x="30" y="90" width="170" height="64" rx="10" fill="#fff" stroke="#5c6d65" stroke-width="1.6"/>
+    <text x="115" y="118" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#5c6d65">سُحب</text>
+    <text x="115" y="138" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="11" fill="#5c6d65">يُحذف الطلب</text>
+
+    <path d="M780 122 H700" stroke="#1a2b24" stroke-width="1.5" marker-end="url(#ink2)"/>
+    <path d="M540 108 C490 80 470 70 450 58" fill="none" stroke="#1c5c3d" stroke-width="1.5" marker-end="url(#ok)"/>
+    <path d="M540 136 C490 164 470 180 450 186" fill="none" stroke="#8a3b34" stroke-width="1.5" marker-end="url(#no)"/>
+    <path d="M620 90 C620 16 200 16 115 90" fill="none" stroke="#5c6d65" stroke-width="1.4" marker-end="url(#grey)"/>
+    <text x="500" y="78" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1c5c3d">قبول</text>
+    <text x="500" y="170" font-family="Geeza Pro, sans-serif" font-size="12" fill="#8a3b34">رفض</text>
+    <text x="700" y="24" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">المستثمر يسحب الطلب وهو قيد الانتظار</text>
+    <defs>
+      <marker id="ink2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+      <marker id="ok" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+      <marker id="no" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8a3b34"/></marker>
+      <marker id="grey" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#5c6d65"/></marker>
+    </defs>
+  </svg>
+  <figcaption>الشكل ٤. يبقى الطلب قيد الانتظار حتى يقبله المالك أو يرفضه، أو يسحبه المستثمر. يمكن إعادة إرسال الطلب المرفوض.</figcaption>
+</figure>
+
+<table>
+  <tr><th>القاعدة</th><th>التفصيل</th></tr>
+  <tr><td>الشراء</td><td>يُسمح به ما دام العرض للبيع</td></tr>
+  <tr><td>الاستغلال</td><td>يُسمح به ما دام العرض مفتوحاً للاستغلال</td></tr>
+  <tr><td>طلب واحد قائم</td><td>مستثمر واحد لكل قطعة. الطلب المرفوض يمكن إرساله من جديد</td></tr>
+  <tr><td>السحب</td><td>أثناء الانتظار فقط. السحب يحذف الطلب</td></tr>
+  <tr><td>القرار</td><td>القبول والرفض يُحفظان على الطلب نفسه. المالك والمستثمر يريان النتيجة</td></tr>
+</table>
+<table>
+  <tr><th>الأرض</th><th>من يقبل أو يرفض</th></tr>
+  <tr><td>قطعة خاصة</td><td>مالك تلك القطعة فقط</td></tr>
+  <tr><td>أرض عامة</td><td>الجهة الحكومية فقط</td></tr>
+</table>
+<p>الجهة الحكومية ترى أن الأرض الخاصة معروضة. قرار القبول والرفض على الأرض الخاصة يبقى للمالك. تغيير العرض لا يحذف طلباً قائماً. يرى المستثمر بعد ذلك أن القطعة لم تعد معروضة لهذا النوع من التعامل.</p>
+
+<h1><span class="num">٠٦</span>العلاقات</h1>
+<div class="rule"></div>
+
+<figure>
+  <svg viewBox="0 0 980 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="علاقات الكيانات">
+    <rect width="980" height="470" fill="#f7faf8"/>
+
+    <rect x="744" y="28" width="200" height="92" rx="8" fill="#1d4e6e"/>
+    <text x="844" y="58" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#fff">الجهة</text>
+    <text x="844" y="80" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#d6eaf3">الاسم · النوع</text>
+    <text x="844" y="100" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="11" fill="#d6eaf3">حكومة · مالك · مستثمر · عامة</text>
+
+    <rect x="744" y="186" width="200" height="72" rx="8" fill="#fff" stroke="#1d4e6e" stroke-width="1.5"/>
+    <text x="844" y="216" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#1d4e6e">الحساب</text>
+    <text x="844" y="238" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">البريد · الدور · الجهة</text>
+
+    <rect x="370" y="100" width="250" height="100" rx="8" fill="#143628"/>
+    <text x="495" y="136" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#fff">قطعة الأرض</text>
+    <text x="495" y="158" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#d7ebe0">المنطقة · الهكتار · القدرة</text>
+    <text x="495" y="178" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#d7ebe0">المحصول · حالة الزراعة · المالك</text>
+
+    <rect x="36" y="28" width="240" height="72" rx="8" fill="#fff" stroke="#8d6a22" stroke-width="1.5"/>
+    <text x="156" y="58" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="15" font-weight="700" fill="#8d6a22">العرض</text>
+    <text x="156" y="80" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">خاصة · بيع · استغلال</text>
+
+    <rect x="36" y="160" width="240" height="86" rx="8" fill="#fff" stroke="#8d6a22" stroke-width="1.5"/>
+    <text x="156" y="192" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="14" font-weight="700" fill="#8d6a22">طلب الاستثمار</text>
+    <text x="156" y="214" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">شراء أو استغلال</text>
+    <text x="156" y="232" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="12" fill="#5c6d65">انتظار · قبول · رفض</text>
+
+    <rect x="430" y="330" width="180" height="70" rx="8" fill="#fff" stroke="#1c5c3d" stroke-width="1.5"/>
+    <text x="520" y="360" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="14" font-weight="700" fill="#1c5c3d">حساس</text>
+    <text x="520" y="380" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="11" fill="#5c6d65">متصل · متدهور · متوقف</text>
+
+    <rect x="200" y="330" width="210" height="70" rx="8" fill="#fff" stroke="#1c5c3d" stroke-width="1.5"/>
+    <text x="305" y="360" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="14" font-weight="700" fill="#1c5c3d">نطاق الري</text>
+    <text x="305" y="380" text-anchor="middle" font-family="Geeza Pro, sans-serif" font-size="11" fill="#5c6d65">دورة · ماء موفّر · الموعد</text>
+
+    <path d="M844 120 V186" stroke="#1d4e6e" stroke-width="1.4" marker-end="url(#b)"/>
+    <text x="700" y="160" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1d4e6e">واحد إلى كثير · يدخل عبره</text>
+
+    <path d="M744 74 H620" stroke="#1a2b24" stroke-width="1.4" marker-end="url(#k)"/>
+    <text x="640" y="66" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1a2b24">يملك</text>
+
+    <path d="M370 130 H276" stroke="#8d6a22" stroke-width="1.4" marker-end="url(#g)"/>
+    <text x="286" y="122" font-family="Geeza Pro, sans-serif" font-size="12" fill="#8d6a22">عرض واحد</text>
+
+    <path d="M370 180 H276" stroke="#8d6a22" stroke-width="1.4" marker-end="url(#g)"/>
+    <text x="286" y="198" font-family="Geeza Pro, sans-serif" font-size="12" fill="#8d6a22">صفر إلى كثير</text>
+
+    <path d="M844 28 C844 8 156 8 156 28" fill="none" stroke="#1d4e6e" stroke-width="1.2"/>
+    <text x="420" y="20" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1d4e6e">المستثمر يقدّم الطلب</text>
+
+    <path d="M520 200 V330" stroke="#1c5c3d" stroke-width="1.3" marker-end="url(#gr)"/>
+    <path d="M430 200 C360 250 305 280 305 330" fill="none" stroke="#1c5c3d" stroke-width="1.3" marker-end="url(#gr)"/>
+    <text x="540" y="280" font-family="Geeza Pro, sans-serif" font-size="12" fill="#1c5c3d">مراقبة الأرض المستصلحة</text>
+
+    <defs>
+      <marker id="b" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1d4e6e"/></marker>
+      <marker id="k" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1a2b24"/></marker>
+      <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8d6a22"/></marker>
+      <marker id="gr" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1c5c3d"/></marker>
+    </defs>
+  </svg>
+  <figcaption>الشكل ٥. الجهة تملك القطع وتدخل عبر الحسابات. لكل قطعة عرض واحد وأي عدد من الطلبات. الحساسات والري تصف الأرض التي دخلت البرنامج.</figcaption>
+</figure>
+
+<table>
+  <tr><th>من</th><th>إلى</th><th>القاعدة</th></tr>
+  <tr><td>الجهة</td><td>الحساب</td><td>الحساب يتصرف نيابة عن جهة واحدة</td></tr>
+  <tr><td>الجهة</td><td>قطعة الأرض</td><td>للقطعة مالك واحد</td></tr>
+  <tr><td>قطعة الأرض</td><td>العرض</td><td>عرض حالي واحد</td></tr>
+  <tr><td>قطعة الأرض</td><td>طلب الاستثمار</td><td>صفر أو أكثر، طلب واحد لكل مستثمر</td></tr>
+  <tr><td>الجهة (المستثمر)</td><td>طلب الاستثمار</td><td>المستثمر الذي أرسله</td></tr>
+  <tr><td>قطعة الأرض</td><td>الحساس والري</td><td>قراءات تشغيل للأرض التي دخلت البرنامج</td></tr>
+</table>
+
+<h1><span class="num">٠٧</span>التشغيل</h1>
+<div class="rule"></div>
+<p>هذه المفاهيم تخدم لوحة الجهة الحكومية. لا تقرر بيعاً ولا استغلالاً. قراءة الحساس لا تغيّر مالك القطعة ولا تجعلها للبيع.</p>
+<table>
+  <tr><th>المفهوم</th><th>ما يسجّله</th></tr>
+  <tr><td>الحساس</td><td>جهاز حقلي: الرقم، والموقع، والنوع، والحالة متصل أو متدهور أو متوقف</td></tr>
+  <tr><td>نطاق الري</td><td>مجموعة وحدات، ودورة التشغيل، والماء الموفّر، والموعد التالي</td></tr>
+  <tr><td>وحدة الزراعة</td><td>محصول في بيئة محكومة، مع المناخ والإنتاج</td></tr>
+  <tr><td>قراءة الطاقة</td><td>التوليد، وحمل الضخ، والبطارية خلال اليوم</td></tr>
+  <tr><td>بند التكلفة</td><td>التكلفة الرأسمالية أو التشغيلية، المخططة والفعلية</td></tr>
+  <tr><td>أثر البرنامج</td><td>الهكتارات المستصلحة، والماء الموفّر، والانبعاثات المتجنَّبة للبرنامج كاملاً</td></tr>
+</table>
+
+<h1><span class="num">٠٨</span>ما يراه كل دور</h1>
+<div class="rule"></div>
+<table>
+  <tr><th>المفهوم</th><th>الجهة الحكومية</th><th>المالك</th><th>المستثمر</th></tr>
+  <tr><td>القطع على الخريطة</td><td>كل القطع</td><td>حيازته فقط</td><td>البيع والاستغلال فقط</td></tr>
+  <tr><td>تحديد العرض</td><td>الأرض العامة فقط</td><td>قطعه فقط</td><td>لا</td></tr>
+  <tr><td>القبول أو الرفض</td><td>الأرض العامة فقط</td><td>قطعه فقط</td><td>لا</td></tr>
+  <tr><td>إرسال طلب</td><td>لا</td><td>لا</td><td>نعم، إذا طابق العرض</td></tr>
+  <tr><td>سحب طلب قيد الانتظار</td><td>لا</td><td>لا</td><td>طلبه هو</td></tr>
+  <tr><td>الحساسات والري والطاقة والتكلفة</td><td>نعم</td><td>لا</td><td>لا</td></tr>
+</table>
+
+<h1><span class="num">٠٩</span>القطع التجريبية</h1>
+<div class="rule"></div>
+<table>
+  <tr><th>القطعة</th><th>المالك</th><th>المنطقة</th><th>المحصول</th><th>الزراعة</th></tr>
+  <tr><td class="ltr">U-012</td><td>مجموعة النخيل</td><td>الرياض</td><td>تمور</td><td>نشطة</td></tr>
+  <tr><td class="ltr">U-033</td><td>مجموعة النخيل</td><td>جدة</td><td>خضروات</td><td>نشطة</td></tr>
+  <tr><td class="ltr">U-067</td><td>مجموعة النخيل</td><td>المنطقة الشرقية</td><td>أعلاف</td><td>نشطة</td></tr>
+  <tr><td class="ltr">U-188</td><td>مجموعة النخيل</td><td>القصيم</td><td>خضروات</td><td>نشطة</td></tr>
+  <tr><td class="ltr">U-041</td><td>واحة العقارية</td><td>المدينة</td><td>أعلاف</td><td>مهيأة</td></tr>
+  <tr><td class="ltr">U-102</td><td>واحة العقارية</td><td>العلا</td><td>تمور</td><td>مهيأة</td></tr>
+  <tr><td class="ltr">U-214</td><td>واحة العقارية</td><td>جازان</td><td>أعلاف</td><td>نشطة</td></tr>
+  <tr><td class="ltr">U-088</td><td>أرض عامة</td><td>تبوك</td><td>تجريبي</td><td>قيد التهيئة</td></tr>
+  <tr><td class="ltr">U-140</td><td>أرض عامة</td><td>نجران</td><td>تجريبي</td><td>قيد التهيئة</td></tr>
+  <tr><td class="ltr">U-301</td><td>أرض عامة</td><td>الجوف</td><td>تجريبي</td><td>قيد التهيئة</td></tr>
+</table>
+<p class="small">العرض الابتدائي للبيع على U-012، ومفتوح للاستغلال حيث كانت القطعة مفتوحة للمستثمرين، وخاصة فيما عدا ذلك. يمكن تغيير هذه العروض داخل البوابة. العرض المتغير والطلبات تبقى في المتصفح لهذه النسخة التجريبية.</p>
+
+</body>
+</html>
